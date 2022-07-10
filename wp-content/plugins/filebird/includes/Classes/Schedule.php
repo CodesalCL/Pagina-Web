@@ -19,14 +19,19 @@ class Schedule {
 	}
 
 	public function actionRemoveZipFiles() {
-		$root_folder   = NJFB_UPLOAD_DIR;
-		$upload_folder = WP_CONTENT_DIR . DIRECTORY_SEPARATOR . $root_folder . DIRECTORY_SEPARATOR;
-		$files         = scandir( $upload_folder );
-		foreach ( $files as $k => $file ) {
-			$created_at = filemtime( $upload_folder . $file );
-			if ( ( time() - $created_at ) >= ( 24 * 60 * 60 ) ) {
-				unlink( $upload_folder . $file );
+		$saved_downloads = get_option( 'filebird_saved_downloads', array() );
+		if( ! is_array($saved_downloads) ) {
+			$saved_downloads = array();
+		}
+		foreach($saved_downloads as $time => $path) {
+			if ( ( time() - $time ) >= ( 24 * 60 * 60 ) ) {
+				$wp_dir = wp_upload_dir();
+				if( file_exists( $wp_dir['basedir'] . $path ) ) {
+					unlink( $wp_dir['basedir'] . $path );
+				}
+				unset($saved_downloads[$time]);
 			}
 		}
+		update_option( 'filebird_saved_downloads', $saved_downloads );
 	}
 }

@@ -3,7 +3,7 @@ Contributors: ninjateam
 Tags: wordpress media library folders, media library folders, media folder, file manager, folders, wp media folder, wp media folders, wordpress media folders, wordpress media library, wordpress media manager, media manager, firebird
 Requires at least: 3.0
 Tested up to: 6.0
-Stable tag: 5.0
+Stable tag: 5.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,11 +32,11 @@ FileBird allows you to create virtual folders to categorize your WordPress media
 
 With FileBird Pro you can save time on WP media management, search for any files & folders, sort them out, add product image gallery, download/export media folders, etc. That’s a great way to boost your admin workflow and productivity.
 
+**NEW - Folder Tree Themes (PRO)**
+Instead of the traditional gray shade of folder icon, now you can transform your "Folderella" into **Dropbox** theme or **Windows 11** styling.
+
 **Download Media Folder (PRO)**
 Export an entire media folder including its subfolders and files in a single ZIP file. Keep the same folder structure. Backup categorized media files.
-
-**Multiple Tree View Styles (PRO)**
-Apart from hierarchical tree view, you have an option to hide levels from tree view, too. This flat tree view is very useful for those with a large number of folders.
 
 **Smart Startup Folder**
 Choose a specific folder or previously opened folder upon startup. Quickly get back to work. Save more time.
@@ -66,7 +66,16 @@ Enabling this mode allows admins and other users with access to create their own
 You can sort and search for file and folder name not only in Media library but also in page/post editor.
 
 **Various Sort Options (PRO)**
-Go advanced with 2 ways to sort folders and 8 ways to sort files. This is a great time-saver for all busy WordPress admins & webmasters.
+Go advanced with 2 ways to sort folders and 10 ways to sort files. This is a great time-saver for all busy WordPress admins & webmasters.
+
+**Sort Files by File Size (PRO)**
+Now you can calculate your attachment size in a single click and be able to sort files by filesize.
+
+**Custom Folder Color (PRO)**
+Right-click on a specific folder to pick a distinct color. This helps differentiate it between numerous folders.
+
+**Multiple Tree View Styles (PRO)**
+Apart from hierarchical tree view, you have an option to hide levels from tree view, too. This flat tree view is very useful for those with a large number of folders.
 
 **Customizable Default File Order**
 Set a way of sorting files ascending/descending alphabetically by the file name, title, date, modified, and author.
@@ -79,6 +88,10 @@ FileBird supports RTL languages including Hebrew, Arabic, etc.
 
 **Many Languages Supported**
 This plugin supports most popular languages such as English, Spanish, Italian, French, Germany, etc.
+
+###🙋‍♂️DID YOU KNOW?
+That FileBird now comes with an addon to help you create a standalone WordPress document gallery using Gutenberg and FileBird folders? 
+→ Be sure to check it out: [FileBird Document Library](https://wordpress.org/plugins/filebird-document-library/).
 
 ###👍 HOW DOES FILEBIRD WORK?
 Are you a WordPress website administrator?
@@ -178,6 +191,11 @@ Happy Organizing! 😍
 
 
 == Changelog ==
+
+= Jul 5, 2022 – Version 5.0.1 = 
+- Updated: Korean Language
+- Removed: All .DS_Store files
+- Fixed: Module build failed
 
 = Jun 30, 2022 - Version 5.0 = 
 - Added: FileBird Gallery Layouts (Flex | Manasory | Grid) and Lightbox
