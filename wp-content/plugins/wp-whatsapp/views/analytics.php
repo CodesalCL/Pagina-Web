@@ -11,6 +11,16 @@
                 <p class="description"><?php echo __('Gain insights of WhatsApp tracking in Google Analytics > Behavior > Events', 'ninjateam-whatsapp') ?></p>
             </td>
         </tr>
+        <tr class="<?php echo ($option['enabledGoogle'] === 'ON') ? '' : 'hidden' ?>">
+            <th></th>
+            <td>
+                <div class="nta-wa-switch-control">
+                    <input type="checkbox" id="enabledGoogleGA4" name="enabledGoogleGA4" <?php checked($option['enabledGoogleGA4'], 'ON') ?>>
+                    <label for="enabledGoogleGA4" class="green"></label>
+                </div>
+                <p class="description"><?php echo __('Please enable this feature if your website is using Google Analytics 4', 'ninjateam-whatsapp') ?></p>
+            </td>
+        </tr>
         <tr>
             <th scope="row"><label for="enabledFacebook"><?php echo __('Facebook Pixel (PRO)', 'ninjateam-whatsapp') ?></label></th>
             <td>

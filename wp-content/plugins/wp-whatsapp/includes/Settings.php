@@ -367,6 +367,7 @@ class Settings
         $new_input = Fields::getAnalyticsSetting();
         $new_input['enabledGoogle'] = isset($_POST['enabledGoogle']) ? 'ON' : 'OFF';
         $new_input['enabledFacebook'] = isset($_POST['enabledFacebook']) ? 'ON' : 'OFF';
+        $new_input['enabledGoogleGA4'] = isset($_POST['enabledGoogleGA4']) ? 'ON' : 'OFF';
         
         update_option('nta_wa_analytics', $new_input);
         wp_send_json_success();

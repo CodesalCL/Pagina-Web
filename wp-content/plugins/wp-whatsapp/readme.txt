@@ -2,8 +2,8 @@
 Contributors: ninjateam
 Tags: whatsapp, whatsapp chat, woocommerce whatsapp, click to chat, whatsapp business, whats app, wame, wp social chat, join chat, wp whatsapp
 Requires at least: 3.0
-Tested up to: 5.9
-Stable tag: trunk
+Tested up to: 6.0
+Stable tag: 3.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,6 +18,8 @@ WhatsApp Chat plugin for WordPress allows you to add WhatsApp floating button, s
 It's easy to set up and works seamlessly with all cache plugins.
 
 You're free to add **multiple** customer service agents, sales rep, technical support, and more.
+
+[DOCUMENTATION](https://ninjateam.gitbook.io/whatsapp-for-wordpress/)
 
 [youtube https://www.youtube.com/watch?v=7YNIHLtiNo4]
 
@@ -47,6 +49,7 @@ Add Order on WhatsApp button on WooCommerce product pages.
 
 **Event Tracking**
 - Google Analytics (PRO)
+- Google Tag Manager and [Google Analytics 4](https://ninjateam.org/whatsapp-chat-event-tracking-in-google-analytics-4-google-tag-manager/) (PRO)
 - Facebook Pixel (PRO)
 
 ### WHY TO USE WHATSAPP FOR WORDPRESS?
@@ -129,8 +132,16 @@ Definitely yes! The pro version comes with cutting edge features and performance
 
 == Changelog ==
 
+= Jul 13, 2022 - Version 3.2 =
+- Added: Validate fields
+- Fixed: Style for range
+
+= Jun 27, 2022 – Version 3.1.9 =
+- Added: Recommended plugins
+
 = Mar 27, 2022 – Version 3.1.8 =
-- Updating...
+- Added: Support Google Tag Manager (PRO)
+- Fixed: Support GA4 (PRO)
 
 = Mar 16, 2022 – Version 3.1.7 =
 -  Fixed: Google Speed Test (Avoid serving legacy JavaScript to modern browsers)

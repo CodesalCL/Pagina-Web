@@ -20,10 +20,10 @@ use NTA_WhatsApp\Helper;
         </tr>
         <tr>
             <th scope="row">
-                <label for="title"><?php echo __('Title', 'ninjateam-whatsapp') ?></label>
+                <label for="wa-title"><?php echo __('Title', 'ninjateam-whatsapp') ?></label>
             </th>
             <td>
-                <input type="text" id="title" name="title" value="<?php echo esc_attr($meta['title']) ?>" class="widefat" autocomplete="off">
+                <input type="text" id="wa-title" name="title" value="<?php echo esc_attr($meta['title']) ?>" class="widefat" autocomplete="off">
             </td>
         </tr>
         <tr>

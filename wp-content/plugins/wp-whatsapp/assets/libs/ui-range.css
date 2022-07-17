@@ -173,7 +173,8 @@
   background: var(--value-background);
   border-radius: 10px;
   padding: 0 4px;
-  top: -3ch;
+  /* top: -3ch; */
+  top: 2.5ch;
   left: var(--pos);
   transform: translate(var(--x-offset), 6px);
   transition: all 0.12s ease-out, left 0s, top 0s;

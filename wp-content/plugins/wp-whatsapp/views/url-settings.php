@@ -13,6 +13,7 @@
         <tr>
             <th scope="row"><?php echo __('URL for Desktop', 'ninjateam-whatsapp') ?></label></th>
             <td>
+                <input name="onDesktop" id="urlOnDesktop" class="hidden" value="<?php echo esc_attr($option['onDesktop']) ?>" />
                 <div class="button-group button-large" data-setting="onDesktop">
                     <button class="button btn-api <?php echo ($option['onDesktop'] == 'api' ? 'active' : '') ?>" value="api" type="button">
                         API
@@ -20,13 +21,13 @@
                     <button class="button btn-web <?php echo ($option['onDesktop'] == 'web' ? 'active' : '') ?>" value="web" type="button">
                         Web
                     </button>
-                    <input name="onDesktop" id="urlOnDesktop" class="hidden" value="<?php echo esc_attr($option['onDesktop']) ?>" />
                 </div>
             </td>
         </tr>
         <tr>
             <th scope="row"><?php echo __('URL for Mobile', 'ninjateam-whatsapp') ?></label></th>
             <td>
+                <input name="onMobile" id="urlOnMobile" class="hidden" value="<?php echo esc_attr($option['onMobile']) ?>" />
                 <div class="button-group button-large" data-setting="onMobile">
                     <button class="button btn-api <?php echo ($option['onMobile'] == 'api' ? 'active' : '') ?>" value="api" type="button">
                         API
@@ -34,7 +35,6 @@
                     <button class="button btn-protocol <?php echo ($option['onMobile'] == 'protocol' ? 'active' : '') ?>" value="protocol" type="button">
                         Protocol
                     </button>
-                    <input name="onMobile" id="urlOnMobile" class="hidden" value="<?php echo esc_attr($option['onMobile']) ?>" />
                 </div>
             </td>
         </tr>

@@ -106,7 +106,8 @@ class Fields
         $option = get_option('nta_wa_analytics', array());
         return wp_parse_args($option, array(
             'enabledGoogle' => 'OFF',
-            'enabledFacebook' => 'OFF'
+            'enabledFacebook' => 'OFF',
+            'enabledGoogleGA4' => 'OFF'
         ));
     }
 

@@ -4,7 +4,7 @@
  * Plugin Name:       WP Chat App
  * Plugin URI:        https://ninjateam.org/wordpress-whatsapp-chat
  * Description:       Integrate your WhatsApp experience directly into your website. This is one of the best way to connect and interact with your customer.
- * Version:           3.1.8
+ * Version:           3.2
  * Author:            NinjaTeam
  * Author URI:        https://ninjateam.org
  * Text Domain:       ninjateam-whatsapp
@@ -14,17 +14,31 @@ namespace NTA_WhatsApp;
 
 defined('ABSPATH') || exit;
 
-define('NTA_WHATSAPP_VERSION', '3.1.8');
-define('NTA_WHATSAPP_PLUGIN_URL', plugin_dir_url(__FILE__));
-define('NTA_WHATSAPP_PLUGIN_DIR', plugin_dir_path(__FILE__));
-define('NTA_WHATSAPP_BASE_NAME', plugin_basename(__FILE__));
-
-if (file_exists(dirname(__FILE__) . '/includes/Cross.php')) {
-    require_once dirname(__FILE__) . '/includes/Cross.php';
+if ( function_exists( 'NTA_WhatsApp\\init' ) ) {
+	require_once plugin_dir_path( __FILE__ ) . 'includes/Fallback.php';
+	add_action(
+		'admin_init',
+		function() {
+			deactivate_plugins( plugin_basename( __FILE__ ) );
+		}
+	);
+	return;
 }
 
-if (file_exists(dirname(__FILE__) . '/includes/Review.php')) {
-    require_once dirname(__FILE__) . '/includes/Review.php';
+if ( ! defined( 'NTA_WHATSAPP_VERSION' ) ) {
+	define( 'NTA_WHATSAPP_VERSION', '3.2' );
+}
+
+if ( ! defined( 'NTA_WHATSAPP_PLUGIN_URL' ) ) {
+	define( 'NTA_WHATSAPP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+}
+
+if ( ! defined( 'NTA_WHATSAPP_PLUGIN_DIR' ) ) {
+	define( 'NTA_WHATSAPP_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+}
+
+if ( ! defined( 'NTA_WHATSAPP_BASE_NAME' ) ) {
+	define( 'NTA_WHATSAPP_BASE_NAME', plugin_basename( __FILE__ ) );
 }
 
 spl_autoload_register(
@@ -50,23 +64,37 @@ spl_autoload_register(
 	}
 );
 
-add_action('plugins_loaded', 'NTA_WhatsApp\\init');
-    
-function init()
-{
-	Plugin::activate();
-    PostType::getInstance();
-    I18n::loadPluginTextdomain();
-    Shortcode::getInstance();
-    Popup::getInstance();
-    Settings::getInstance();
-    Upgrade::getInstance();
-    Support\WPML::getInstance();
-    Support\Woocommerce::getInstance();
-    if ( function_exists( 'register_block_type' ) ) {
-        require_once plugin_dir_path( __FILE__ ) . 'blocks/src/init.php';
-    }
+if (file_exists(dirname(__FILE__) . '/includes/Review.php')) {
+	require_once dirname(__FILE__) . '/includes/Review.php';
 }
+
+if (file_exists(dirname(__FILE__) . '/includes/Cross.php')) {
+	require_once dirname(__FILE__) . '/includes/Cross.php';
+}
+
+if (file_exists(dirname(__FILE__) . '/includes/Recommended/Recommended.php')) {
+	require_once dirname(__FILE__) . '/includes/Recommended/Recommended.php';
+}
+
+if ( ! function_exists( 'NTA_WhatsApp\\init' ) ) {
+	function init() {
+		Plugin::activate();
+		PostType::getInstance();
+		I18n::loadPluginTextdomain();
+		Shortcode::getInstance();
+		Popup::getInstance();
+		Settings::getInstance();
+		Upgrade::getInstance();
+		Support\WPML::getInstance();
+		Support\Woocommerce::getInstance();
+		if ( function_exists( 'register_block_type' ) ) {
+			require_once plugin_dir_path( __FILE__ ) . 'blocks/src/init.php';
+		}
+	}
+}
+
+
+add_action('plugins_loaded', 'NTA_WhatsApp\\init');
 
 register_activation_hook(__FILE__, array('NTA_WhatsApp\\Plugin', 'activate'));
 register_deactivation_hook(__FILE__, array('NTA_WhatsApp\\Plugin', 'deactivate'));
