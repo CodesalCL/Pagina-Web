@@ -2,22 +2,132 @@
 # This file is distributed under the same license as the Themes - Inspiro package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2022-03-04 07:03:26+0000\n"
+"PO-Revision-Date: 2022-08-20 08:51:29+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: GlotPress/3.0.0-alpha.2\n"
+"X-Generator: GlotPress/4.0.0-alpha.1\n"
 "Language: es\n"
 "Project-Id-Version: Themes - Inspiro\n"
 
 #. Description of the theme
+#, gp-priority: high
 msgid "Inspiro is a professional & lightweight photo and video-focused WordPress theme with a modern design. Packed with features including a fullscreen area that supports Vimeo, YouTube & self-hosted video background, Page Builder integration, Inspiro is perfect for showing off your photography and video portfolio. Moreover, the theme is compatible with WooCommerce and popular Page Builders such as Elementor, Beaver Builder. Learn more and check out our powerful PREMIUM version at https://www.wpzoom.com/themes/inspiro/"
 msgstr "Inspiro es un tema profesional y ligero para WordPress, centrado en la fotografía y el vídeo con un diseño moderno. Repleto de características, incluyendo un área a pantalla completa que es compatible con Vimeo, YouTube y con vídeo de fondo autoalojado, integración con maquetadores de páginas, Inspiro es perfecto para mostrar tu porfolio de fotografías y vídeos. Además, el tema es compatible con WooCommerce y con los maquetadores de páginas más populares, como Elementor y Beaver Builder. Obtén más información y consulta nuestra potente versión PREMIUM en https://www.wpzoom.com/themes/inspiro/"
 
 #. Theme Name of the theme
+#, gp-priority: high
 msgid "Inspiro"
 msgstr "Inspiro"
+
+#: inc/customizer/configs/colors/class-inspiro-header-button-color-config.php:226
+msgid "👉 Unlock all customizations"
+msgstr "👉 Desbloquea todas las personalizaciones"
+
+#: inc/customizer/configs/colors/class-inspiro-header-button-color-config.php:225
+msgid "Unlock all customization options by upgrading to the Premium version of the theme. Customize colors, fonts, header, footer & much more!"
+msgstr "Desbloquea todas las opciones de personalización actualizando a la versión Premium del tema. ¡Personaliza colores, fuentes, la cabecera, el pie de página y mucho más!"
+
+#: inc/customizer/configs/colors/class-inspiro-header-button-color-config.php:224
+msgid "🎨 There are 68 more color & font options in Inspiro Premium!"
+msgstr "🎨 ¡Hay 68 opciones más de colores y fuentes en Inspiro Premium!"
+
+#: inc/customizer/configs/colors/class-inspiro-header-button-color-config.php:214
+msgid "Text Color"
+msgstr "Color del texto"
+
+#: inc/customizer/configs/colors/class-inspiro-header-button-color-config.php:205
+msgid "Footer Background"
+msgstr "Fondo del pie de página"
+
+#: inc/customizer/configs/colors/class-inspiro-header-button-color-config.php:187
+msgid "Menu Background on Scroll"
+msgstr "Fondo del menú al hacer scroll"
+
+#: inc/customizer/configs/colors/class-inspiro-header-button-color-config.php:178
+msgid "Menu Background"
+msgstr "Fondo del menú"
+
+#: inc/customizer/configs/colors/class-inspiro-header-button-color-config.php:168
+msgid "Top Menu"
+msgstr "Menú superior"
+
+#: inc/customizer/configs/colors/class-inspiro-header-button-color-config.php:32
+msgid "Colors"
+msgstr "Colores"
+
+#: inc/customizer/configs/header/class-inspiro-header-area-config.php:186
+msgid "Show search icon and search form in the header"
+msgstr "Mostrar el icono y el formulario de búsqueda en la cabecera"
+
+#: inc/customizer/configs/header/class-inspiro-header-area-config.php:165
+msgid "Elements"
+msgstr "Elementos"
+
+#: inc/customizer/configs/header/class-inspiro-header-area-config.php:127
+msgid "Full-width"
+msgstr "Ancho completo"
+
+#: inc/customizer/configs/header/class-inspiro-header-area-config.php:126
+msgid "Narrow"
+msgstr "Estrecho"
+
+#: inc/customizer/configs/header/class-inspiro-header-area-config.php:122
+msgid "Header Menu Width"
+msgstr "Anchura del menú de la cabecera"
+
+#: inc/customizer/configs/header/class-inspiro-header-area-config.php:103
+msgid "Center menu with Logo Center"
+msgstr "Menú y logotipo en el centro"
+
+#: inc/customizer/configs/header/class-inspiro-header-area-config.php:99
+msgid "Left menu with Logo Center"
+msgstr "Menú izquierdo con logotipo en el centro"
+
+#: inc/customizer/configs/header/class-inspiro-header-area-config.php:74
+msgid "Hidden menu"
+msgstr "Menú oculto"
+
+#: inc/customizer/configs/header/class-inspiro-header-area-config.php:70
+msgid "Menu on center"
+msgstr "Menú en el centro"
+
+#: inc/customizer/configs/header/class-inspiro-header-area-config.php:66
+msgid "Menu on left side"
+msgstr "Menú a la izquierda"
+
+#: inc/customizer/configs/header/class-inspiro-header-area-config.php:62
+msgid "Default Style"
+msgstr "Estilo por defecto"
+
+#: inc/customizer/configs/header/class-inspiro-header-area-config.php:58
+msgid "Select the header layout. The hamburger icon appears on the desktop if the Sidebar has at least one widget. On mobile devices, the main menu is displayed in the sidebar."
+msgstr "Selecciona el diseño de la cabecera. El icono de hamburguesa aparece en dispositivos de escritorio si la barra lateral tiene al menos un widget. En dispositivos móviles, el menú principal se muestra en la barra lateral."
+
+#: inc/customizer/configs/header/class-inspiro-header-area-config.php:57
+msgid "Header Layout"
+msgstr "Diseño de la cabecera"
+
+#: inc/customizer/configs/header/class-inspiro-header-area-config.php:40
+msgid "Header"
+msgstr "Cabecera"
+
+#: inc/customizer/configs/footer/class-inspiro-footer-widget-areas-config.php:103
+#: inc/customizer/configs/footer/class-inspiro-footer-widget-areas-config.php:107
+#: inc/customizer/configs/footer/class-inspiro-footer-widget-areas-config.php:111
+#: inc/customizer/configs/footer/class-inspiro-footer-widget-areas-config.php:115
+msgid "Footer Pro"
+msgstr "Pie de página Pro"
+
+#: inc/customizer/configs/footer/class-inspiro-footer-widget-areas-config.php:99
+#: inc/customizer/configs/header/class-inspiro-header-area-config.php:95
+msgid "PRO"
+msgstr "PRO"
+
+#: inc/customizer/configs/footer/class-inspiro-footer-widget-areas-config.php:58
+msgid "Footer Layout"
+msgstr "Diseño del pie de página"
 
 #: inc/theme-info-page.php:167
 msgid "To ease up the journey you’re starting with Inspiro, we’re sending you some useful tips & tricks to have the best experience building your website."
@@ -125,13 +235,9 @@ msgstr "Instalar los plugins recomendados &rarr;"
 msgid "Please install and activate recommended plugins to enable this feature."
 msgstr "Por favor, instala y activa los plugins recomendados para activar esta característica."
 
-#: inc/customizer/configs/header/class-inspiro-header-area-config.php:49
+#: inc/customizer/configs/header/class-inspiro-header-area-config.php:185
 msgid "Show Seach Icon"
 msgstr "Mostrar el icono de búsqueda"
-
-#: inc/customizer/configs/header/class-inspiro-header-area-config.php:31
-msgid "Header Settings"
-msgstr "Ajustes de la cabecera"
 
 #: inc/theme-info-page.php:140
 msgid "Importing demo data (post, pages, images, etc.) is the quickest and easiest way to set up your new theme. It allows you to simply edit everything instead of creating content and layouts from scratch."
@@ -146,11 +252,11 @@ msgstr "Importar el contenido de demostración"
 msgid "Elementor Integration"
 msgstr "Integración de Elementor"
 
-#: inc/customizer/class-inspiro-customizer.php:233
+#: inc/customizer/class-inspiro-customizer.php:260
 msgid "View Inspiro Premium"
 msgstr "Ver Inspiro Premium"
 
-#: inc/admin-notice.php:92 inc/customizer/class-inspiro-customizer.php:231
+#: inc/admin-notice.php:92 inc/customizer/class-inspiro-customizer.php:258
 #: inc/theme-info-page.php:313
 msgid "Upgrade to Inspiro Premium"
 msgstr "Actualizar a Inspiro Premium"
@@ -496,16 +602,16 @@ msgstr "Elegir un preajuste anulará todos los ajustes de las fuentes."
 msgid "Presets"
 msgstr "Preajustes"
 
-#: inc/customizer/class-inspiro-customizer.php:407
+#: inc/customizer/class-inspiro-customizer.php:435
 msgid "System Fonts"
 msgstr "Fuentes de sistema"
 
-#: inc/customizer/class-inspiro-customizer.php:406
+#: inc/customizer/class-inspiro-customizer.php:434
 msgid "Default System Font"
 msgstr "Fuete del sistema por defecto"
 
 #: inc/classes/class-inspiro-font-family-manager.php:186
-#: inc/customizer/class-inspiro-customizer.php:387
+#: inc/customizer/class-inspiro-customizer.php:415
 #: inc/customizer/custom-controls/font-variant/class-inspiro-customize-font-variant-control.php:88
 #: inc/customizer/custom-controls/typography/class-inspiro-customize-typography-control.php:104
 msgid "Inherit"
@@ -626,17 +732,17 @@ msgstr "Título del botón de la cabecera"
 msgid "Media"
 msgstr "Media"
 
-#: inc/customizer/configs/colors/class-inspiro-header-button-color-config.php:81
-msgid "Header Button Background Color Hover"
-msgstr "Color de fondo del botón de cabecera al pasar el cursor"
+#: inc/customizer/configs/colors/class-inspiro-header-button-color-config.php:159
+msgid "Hero Button Background Color Hover"
+msgstr "Color de fondo del botón de la sección a pantalla completa al pasar el cursor"
 
-#: inc/customizer/configs/colors/class-inspiro-header-button-color-config.php:73
-msgid "Header Button Text Color Hover"
-msgstr "Color del texto del botón de la cabecera al pasar el cursor"
+#: inc/customizer/configs/colors/class-inspiro-header-button-color-config.php:151
+msgid "Hero Button Text Color Hover"
+msgstr "Color del texto del botón de la sección a pantalla completa al pasar el cursor"
 
-#: inc/customizer/configs/colors/class-inspiro-header-button-color-config.php:65
-msgid "Header Button Text Color"
-msgstr "Color del texto del botón de la cabecera"
+#: inc/customizer/configs/colors/class-inspiro-header-button-color-config.php:143
+msgid "Hero Button Text Color"
+msgstr "Color del texto del botón de la sección a pantalla completa"
 
 #: inc/classes/class-inspiro-notice-review.php:91
 msgid "Hide this notice"
@@ -814,7 +920,7 @@ msgstr "Acerca de Inspiro"
 msgid "Welcome to Inspiro Lite"
 msgstr "Bienvenido a Inspiro Lite"
 
-#: inc/customizer/class-inspiro-customizer.php:232
+#: inc/customizer/class-inspiro-customizer.php:259
 msgid "Unlock premium features: 7 Style Kits, Video Backgrounds, Portfolio Integration, Premium Support and much more..."
 msgstr "Desbloquea las características premium: 7 kits de estilo, fondos de vídeo, integración de carteras, soporte premium y mucho más..."
 
@@ -1232,11 +1338,11 @@ msgstr "Últimas entradas"
 msgid "Skip to content"
 msgstr "Saltar al contenido"
 
-#: inc/custom-header.php:147
+#: inc/custom-header.php:179
 msgid "Pause background video"
 msgstr "Pausar el vídeo de fondo"
 
-#: inc/custom-header.php:146
+#: inc/custom-header.php:178
 msgid "Play background video"
 msgstr "Reproducir el vídeo de fondo"
 
@@ -1337,6 +1443,7 @@ msgstr "Ancho completo"
 msgid "Blog Layout"
 msgstr "Diseño del blog"
 
+#: inc/customizer/configs/colors/class-inspiro-header-button-color-config.php:33
 #: inc/customizer/configs/theme-layout/class-inspiro-theme-layout-config.php:32
 msgid "If you want to display \"Sidebar on the right\", please make sure you have added some widgets to %s"
 msgstr "Si quieres mostrar la «Barra lateral a la derecha», por favor, asegúrate de que has añadido algunos widgets a %s"
@@ -1345,29 +1452,25 @@ msgstr "Si quieres mostrar la «Barra lateral a la derecha», por favor, asegúr
 msgid "Theme Layout"
 msgstr "Diseño del tema"
 
-#: inc/customizer/configs/footer/class-inspiro-footer-widget-areas-config.php:54
+#: inc/customizer/configs/footer/class-inspiro-footer-widget-areas-config.php:78
 msgid "Four Columns"
 msgstr "Cuatro columnas"
 
-#: inc/customizer/configs/footer/class-inspiro-footer-widget-areas-config.php:53
+#: inc/customizer/configs/footer/class-inspiro-footer-widget-areas-config.php:74
 msgid "Three Columns"
 msgstr "Tres columnas"
 
-#: inc/customizer/configs/footer/class-inspiro-footer-widget-areas-config.php:52
+#: inc/customizer/configs/footer/class-inspiro-footer-widget-areas-config.php:70
 msgid "Two Columns"
 msgstr "Dos columnas"
 
-#: inc/customizer/configs/footer/class-inspiro-footer-widget-areas-config.php:51
+#: inc/customizer/configs/footer/class-inspiro-footer-widget-areas-config.php:66
 msgid "One Column"
 msgstr "Una columna"
 
-#: inc/customizer/configs/footer/class-inspiro-footer-widget-areas-config.php:50
+#: inc/customizer/configs/footer/class-inspiro-footer-widget-areas-config.php:62
 msgid "Don't display Widgets"
 msgstr "No mostrar widgets"
-
-#: inc/customizer/configs/footer/class-inspiro-footer-widget-areas-config.php:46
-msgid "Number of Widget Areas"
-msgstr "Número de áreas de widgets"
 
 #: inc/customizer/configs/colors/class-inspiro-color-scheme-config.php:55
 msgid "Custom"
@@ -1483,6 +1586,7 @@ msgid "Add widgets here to appear in your sidebar on blog posts and archive page
 msgstr "Añade widgets aquí para que aparezcan en tu barra lateral en las entradas del blog y en las páginas de archivo."
 
 #: inc/common-functions.php:82
+#: inc/customizer/configs/colors/class-inspiro-header-button-color-config.php:33
 #: inc/customizer/configs/theme-layout/class-inspiro-theme-layout-config.php:32
 msgid "Blog Sidebar"
 msgstr "Barra lateral del blog"
@@ -1655,16 +1759,16 @@ msgstr "¿Listo para publicar tu primera entrada? <a href=\"%s\">Empieza aquí</
 msgid "Nothing Found"
 msgstr "No se ha encontrado nada"
 
-#: template-parts/navigation/navigation-primary.php:50
+#: template-parts/navigation/navigation-primary.php:54
 msgid "Toggle sidebar &amp; navigation"
 msgstr "Alternar la barra lateral y la navegación"
 
-#: template-parts/navigation/navigation-primary.php:25
+#: template-parts/navigation/navigation-primary.php:27
 msgctxt "menu"
 msgid "Top Horizontal Menu"
 msgstr "Menú horizontal superior"
 
-#: template-parts/page/content-page.php:59
+#: template-parts/page/content-page.php:61
 #: template-parts/post/content-audio.php:56
 #: template-parts/post/content-gallery.php:43
 #: template-parts/post/content-image.php:35
@@ -1685,19 +1789,23 @@ msgstr "Funciona con %s"
 msgid "https://wordpress.org/"
 msgstr "https://es.wordpress.org/"
 
-#: inc/customizer/configs/footer/class-inspiro-footer-widget-areas-config.php:31
-#: template-parts/footer/footer-widgets.php:22
+#: inc/customizer/configs/colors/class-inspiro-header-button-color-config.php:196
+#: inc/customizer/configs/footer/class-inspiro-footer-widget-areas-config.php:40
+#: template-parts/footer/footer-widgets.php:26
 msgid "Footer"
 msgstr "Pie de página"
 
 #. Author URI of the theme
+#, gp-priority: low
 msgid "https://www.wpzoom.com/"
 msgstr "https://www.wpzoom.com/"
 
 #. Author of the theme
+#, gp-priority: low
 msgid "WPZOOM"
 msgstr "WPZOOM"
 
 #. Theme URI of the theme
+#, gp-priority: low
 msgid "https://www.wpzoom.com/free-wordpress-themes/inspiro-lite/"
 msgstr "https://www.wpzoom.com/free-wordpress-themes/inspiro-lite/"

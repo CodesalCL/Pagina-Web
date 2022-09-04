@@ -153,7 +153,7 @@ function inspiroBuildStyleTag( control, value, cssProperty ) {
 		} );
 	} );
 
-	// Header button text color.
+	// Header button text color
 	wp.customize( 'header_button_textcolor', function ( value ) {
 		value.bind( function ( to ) {
 			if ( 'blank' === to ) {
@@ -168,7 +168,67 @@ function inspiroBuildStyleTag( control, value, cssProperty ) {
 		} );
 	} );
 
-	// Color scheme.
+    // Menu background
+    wp.customize( 'color_menu_background', function ( value ) {
+        value.bind( function ( to ) {
+            if ( 'blank' === to ) {
+                $( '.navbar' ).css( {
+                    color: '#101010',
+                } );
+            } else {
+                $( '.navbar' ).css( {
+                    color: to,
+                } );
+            }
+        } );
+    } );
+
+    // Footer backgorund
+    wp.customize( 'color_footer_background', function ( value ) {
+        value.bind( function ( to ) {
+            if ( 'blank' === to ) {
+                $( '.site-footer' ).css( {
+                    background: '#101010',
+                } );
+            } else {
+                $( '.site-footer' ).css( {
+                    background: to,
+                } );
+            }
+        } );
+    } );
+
+    // Footer text color
+    wp.customize( 'color_footer_text', function ( value ) {
+        value.bind( function ( to ) {
+            if ( 'blank' === to ) {
+                $( '.site-footer' ).css( {
+                    color: '#78787f',
+                } );
+            } else {
+                $( '.site-footer' ).css( {
+                    color: to,
+                } );
+            }
+        } );
+    } );
+
+	// Sticky Menu background Color
+	wp.customize( 'color-menu-background-scroll', function ( value ) {
+		value.bind( function ( to ) {
+			if ( 'blank' === to ) {
+				$( '.headroom--not-top .navbar' ).css( {
+					background: 'rgba(0,0,0,.9)',
+				} );
+			} else {
+				$( '.headroom--not-top .navbar' ).css( {
+					background: to,
+				} );
+			}
+		} );
+	} );
+
+	// Color scheme
 	wp.customize( 'colorscheme', function ( value ) {
 		value.bind( function ( to ) {
 			// Update color body class.

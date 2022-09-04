@@ -182,6 +182,19 @@ if ( ! class_exists( 'Inspiro_Customizer' ) ) {
 			/**
 			 * Add controls
 			 */
+			Inspiro_Customizer_Control_Base::register_custom_control(
+				'inspiro-alpha-color-picker',
+				array(
+					'callback' => 'Inspiro_Customize_Alpha_Color_Picker_Control',
+				)
+			);
+
+            Inspiro_Customizer_Control_Base::register_custom_control(
+                'inspiro-pro-upsell',
+                array(
+                    // 'callback' => 'Inspiro_Customize_Pro_Upsell',
+                )
+            );
 
 			Inspiro_Customizer_Control_Base::register_custom_control(
 				'inspiro-range',
@@ -194,6 +207,20 @@ if ( ! class_exists( 'Inspiro_Customizer' ) ) {
 				'inspiro-title',
 				array(
 					'callback' => 'Inspiro_Customize_Title_Control',
+				)
+			);
+
+			Inspiro_Customizer_Control_Base::register_custom_control(
+				'image-select',
+				array(
+					'callback' => 'Inspiro_Customize_Image_Select_Control',
+				)
+			);
+
+			Inspiro_Customizer_Control_Base::register_custom_control(
+				'promo-pro',
+				array(
+					'callback' => 'Inspiro_Customize_Promo_Pro_Control',
 				)
 			);
 
@@ -236,6 +263,7 @@ if ( ! class_exists( 'Inspiro_Customizer' ) ) {
 					)
 				)
 			);
+
 
 			// Change transport type for Header Text color.
 			$wp_customize->get_setting( 'header_textcolor' )->transport = 'postMessage';
