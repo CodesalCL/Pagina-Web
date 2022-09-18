@@ -2,8 +2,8 @@
 Contributors: ninjateam
 Tags: wordpress media library folders, media library folders, media folder, file manager, folders, wp media folder, wp media folders, wordpress media folders, wordpress media library, wordpress media manager, media manager, firebird
 Requires at least: 3.0
-Tested up to: 6.0
-Stable tag: 5.0.5
+Tested up to: 6.0.2
+Stable tag: 5.0.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -191,6 +191,12 @@ Happy Organizing! 😍
 
 
 == Changelog ==
+
+= Sep 12, 2022 – Version 5.0.6 =
+- Fixed: SVG Icon in Safari
+- Added: Notice when create/update folder fail
+- Fixed: FileBird Gallery not display image when using EWWW Image Optimizer plugin
+- Fixed: Some bugs
 
 = Aug 11, 2022 - Version 5.0.5 =
 - Fixed: Some bugs

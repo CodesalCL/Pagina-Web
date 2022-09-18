@@ -156,7 +156,7 @@ function filebird_gallery_render( $attributes ) {
 		}
 
 		$img  = '<img src="' . esc_attr( $imageSrc ) . '"' . ' alt="' . $imageAlt . '"';
-		$img .= 'class="' . "wp-image-{$post->ID}" . '"/>';
+		$img .= ' class="' . "wp-image-{$post->ID}" . '"/>';
 
 		$li  = '<li class="blocks-gallery-item">';
 		$li .= '<figure>';
