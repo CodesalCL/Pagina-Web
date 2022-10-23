@@ -1,0 +1,1 @@
+[21-Oct-2022 18:41:34 UTC] PHP Warning:  The magic method Revisr::__wakeup() must have public visibility in /home/codesalc/public_html/wp-content/plugins/revisr/revisr.php on line 113
