@@ -713,3 +713,5 @@ Stack trace:
 [09-Sep-2022 03:08:14 UTC] PHP Warning:  The magic method Revisr::__wakeup() must have public visibility in /home/codesalc/public_html/wp-content/plugins/revisr/revisr.php on line 113
 [21-Oct-2022 18:44:40 UTC] PHP Warning:  The magic method Revisr::__wakeup() must have public visibility in /home/codesalc/public_html/wp-content/plugins/revisr/revisr.php on line 113
 [21-Oct-2022 18:56:10 UTC] PHP Warning:  The magic method Revisr::__wakeup() must have public visibility in /home/codesalc/public_html/wp-content/plugins/revisr/revisr.php on line 113
+[24-Oct-2022 17:07:20 UTC] PHP Warning:  The magic method Revisr::__wakeup() must have public visibility in /home/codesalc/public_html/wp-content/plugins/revisr/revisr.php on line 113
+[29-Oct-2022 04:58:58 UTC] PHP Warning:  The magic method Revisr::__wakeup() must have public visibility in /home/codesalc/public_html/wp-content/plugins/revisr/revisr.php on line 113
