@@ -96,6 +96,15 @@ class Popup
     {
         $isPageOrShop = apply_filters('njt_whatsapp_is_page_or_shop_filter', is_page());
         $postId       = apply_filters('njt_whatsapp_get_post_id_filter', $postId);
+        $showInPostTypes = apply_filters( 'njt_whatsapp_display_in_post_types', array() );
+
+		if ( ! empty( $showInPostTypes ) ) {
+			$post_type = get_post_type( $postId );
+
+			if ( in_array( $post_type, $showInPostTypes ) ) {
+				return false;
+			}
+		}
 
         if ($option['displayCondition'] == 'includePages') {
             if (is_array($option['includePages']) && $isPageOrShop && in_array(strval($postId), $option['includePages'])) {
@@ -112,23 +121,22 @@ class Popup
     }
 
     public function get_accounts_active_and_meta(){
-        $postType = PostType::getInstance();
-        $results = array_map(function ($account){
-            $meta = get_post_meta($account->ID, 'nta_wa_account_info', true);
-            $avatar = get_the_post_thumbnail_url($account->ID);
-            return array_merge(array(
-                'accountId' => $account->ID,
-                'accountName' => $account->post_title,
-                'avatar' => $avatar !== false ? $avatar : '',
-            ), $meta);
-        }, $postType->get_active_widget_accounts());
-        return $results;
+        $results  = array();
+		$accounts = PostType::getInstance()->get_active_widget_accounts();
+		foreach ( $accounts as $account ) {
+			$meta   = get_post_meta( $account->ID, 'nta_wa_account_info', true );
+			$avatar = get_the_post_thumbnail_url( $account->ID );
+            if ('' !== $meta) {
+                $results[] = array_merge(
+                    array(
+                        'accountId'   => $account->ID,
+                        'accountName' => $account->post_title,
+                        'avatar'      => $avatar !== false ? $avatar : '',
+                    ),
+                    $meta
+                );
+            }
+		}
+		return $results;
     }
-
-    // public function show_popup_view()
-    // {
-    //     //prevent Oxygen builder
-    //     if (isset($_GET['ct_builder']) && !isset($_GET['oxygen_iframe'])) {
-    //         return;
-    //     }
 }

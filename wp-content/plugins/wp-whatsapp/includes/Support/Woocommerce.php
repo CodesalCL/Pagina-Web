@@ -57,6 +57,28 @@ class Woocommerce
         } elseif ($setting['position'] == 'after_long_description') {
             add_filter('the_content', [$this, 'showAfterLongDescription']);
         }
+
+        add_filter('woocommerce_stock_html', [$this, 'woocommerce_stock_html'], 10, 3);
+    }
+
+    public function woocommerce_stock_html( $html, $availability, $product){
+        $shouldDisplay = apply_filters('njt_wa_out_of_stock_display', false);
+
+        if ($product->is_in_stock() || !$shouldDisplay) {
+            return $html;
+        }
+
+        if (!self::$isInserted) {
+            self::$isInserted = true;
+        } else {
+            return $html;
+        }
+
+        foreach ($this->activeAccounts as $row) {
+            $html .= '<div class="nta-woo-products-button">' . do_shortcode('[njwa_button id="' . esc_attr($row->ID) . '"]') . '</div>';
+        }
+
+        return $html;
     }
 
     public function getPostId($postId){

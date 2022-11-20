@@ -3,7 +3,7 @@ Contributors: ninjateam
 Tags: wordpress media library folders, media library folders, media folder, file manager, folders, wp media folder, wp media folders, wordpress media folders, wordpress media library, wordpress media manager, media manager, firebird
 Requires at least: 3.0
 Tested up to: 6.1
-Stable tag: 5.0.9
+Stable tag: 5.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -191,6 +191,10 @@ Happy Organizing! 😍
 
 
 == Changelog ==
+
+= Nov 15, 2022 - Version 5.1 =
+- Fixed: Import folders from WP Media Folders (by Damien Barrère)
+- Fixed: Move attachment 
 
 = Nov 10, 2022 - Version 5.0.9 =
 - Added: Import folders from WP Media Folders (by Damien Barrère)

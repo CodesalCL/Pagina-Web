@@ -67,14 +67,14 @@ class Helpers {
 		}
 		if ( $flat ) {
 			foreach ( $folders as $k => $folder ) {
-				$children = self::foldersFromWpmf( $folder->id, $flat );
+				$children = self::foldersFromWpfeml( $folder->id, $flat );
 				foreach ( $children as $k2 => $v2 ) {
 					$folders[] = $v2;
 				}
 			}
 		} else {
 			foreach ( $folders as $k => $folder ) {
-				$folders[ $k ]->children = self::foldersFromWpmf( $folder->id, $flat );
+				$folders[ $k ]->children = self::foldersFromWpfeml( $folder->id, $flat );
 			}
 		}
 		return $folders;

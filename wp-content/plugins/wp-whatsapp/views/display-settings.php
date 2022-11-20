@@ -28,7 +28,7 @@
             </td>
         </tr>
         <tr>
-            <th scope="row"><label for="displayCondition"><?php echo __('Display', 'ninjateam-whatsapp') ?></label></th>
+            <th scope="row"><label for="displayCondition"><?php echo __('Display on Pages', 'ninjateam-whatsapp') ?></label></th>
             <td>
                 <select name="displayCondition" id="displayCondition">
                     <option <?php selected($option['displayCondition'], 'excludePages'); ?> value="excludePages"><?php echo __("Show on all pages except", "ninjateam-whatsapp") ?></option>
@@ -87,6 +87,12 @@
                 ?>
             </ul>
         </td>
+        </tr>
+        <tr>
+            <th scope="row"><label for="njt-post-selector"><?php echo __('Display on Posts (PRO)', 'ninjateam-whatsapp') ?></label></th>
+            <td>
+                <select name="includePosts[]" id="njt-post-selector" disabled></select>
+            </td>
         </tr>
     </tbody>
 </table>

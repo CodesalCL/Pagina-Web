@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WhatsApp Chat by NinjaTeam\n"
-"POT-Creation-Date: 2022-04-04 11:21+0700\n"
+"POT-Creation-Date: 2022-09-15 11:36+0700\n"
 "PO-Revision-Date: 2020-11-17 14:11+0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1.1\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-Flags-xgettext: --add-comments=translators:\n"
 "X-Poedit-WPHeader: whatsapp.php\n"
@@ -117,37 +117,48 @@ msgstr ""
 msgid "Recommend"
 msgstr ""
 
+#: includes/Fallback.php:11
+msgid ""
+"It looks like you have another WhatsApp version installed, please delete it "
+"before activating this new version. All of the settings and data are still "
+"preserved."
+msgstr ""
+
+#: includes/Fallback.php:13
+msgid "Read more details."
+msgstr ""
+
 #: includes/Fields.php:32 includes/Upgrade.php:221
 msgid "Need Help? Chat with us"
 msgstr ""
 
-#: includes/Fields.php:72
+#: includes/Fields.php:73
 msgid "Start a Conversation"
 msgstr ""
 
-#: includes/Fields.php:73
+#: includes/Fields.php:74
 msgid "The team typically replies in a few minutes."
 msgstr ""
 
-#: includes/Fields.php:74
+#: includes/Fields.php:75
 msgid "Hi! Click one of our member below to chat on <strong>WhatsApp</strong>"
 msgstr ""
 
-#: includes/Fields.php:82
+#: includes/Fields.php:83
 msgid "Need Help? <strong>Chat with us</strong>"
 msgstr ""
 
-#: includes/Fields.php:91
+#: includes/Fields.php:92
 msgid ""
 "Please accept our <a href=\"https://ninjateam.org/privacy-policy/\">privacy "
 "policy</a> first to start a conversation."
 msgstr ""
 
-#: includes/Fields.php:120
+#: includes/Fields.php:121
 msgid "I will be back in [njwa_time_work]"
 msgstr ""
 
-#: includes/Fields.php:121
+#: includes/Fields.php:122
 msgid "I will be back soon"
 msgstr ""
 
@@ -251,6 +262,149 @@ msgstr ""
 msgid "Shortcode"
 msgstr ""
 
+#: includes/Recommended/Recommended.php:128
+#: includes/Recommended/Recommended.php:218
+#: includes/Recommended/Recommended.php:514
+msgid "Recommended Plugins"
+msgstr ""
+
+#: includes/Recommended/Recommended.php:267
+#: includes/Recommended/Recommended.php:315
+#: includes/Recommended/Recommended.php:363
+msgid "Nonce is invalid"
+msgstr ""
+
+#: includes/Recommended/Recommended.php:284
+msgid "Get data success"
+msgstr ""
+
+#: includes/Recommended/Recommended.php:292
+#: includes/Recommended/Recommended.php:336
+#: includes/Recommended/Recommended.php:446
+msgid "Error exception."
+msgstr ""
+
+#: includes/Recommended/Recommended.php:301
+#: includes/Recommended/Recommended.php:345
+#: includes/Recommended/Recommended.php:455
+msgid "Error."
+msgstr ""
+
+#: includes/Recommended/Recommended.php:329
+msgid "Activate success"
+msgstr ""
+
+#: includes/Recommended/Recommended.php:412
+msgid "Install success"
+msgstr ""
+
+#: includes/Recommended/Recommended.php:436
+msgid "Update success"
+msgstr ""
+
+#. translators: %s: Plugin name and version.
+#: includes/Recommended/views/content.php:65
+#, php-format
+msgctxt "plugin"
+msgid "Install %s now"
+msgstr ""
+
+#: includes/Recommended/views/content.php:66
+msgid "Install Now"
+msgstr ""
+
+#: includes/Recommended/views/content.php:71
+msgctxt "plugin"
+msgid "Cannot Install"
+msgstr ""
+
+#. translators: %s: Plugin name and version.
+#: includes/Recommended/views/content.php:87
+#, php-format
+msgctxt "plugin"
+msgid "Update %s now"
+msgstr ""
+
+#: includes/Recommended/views/content.php:89
+msgid "Update Now"
+msgstr ""
+
+#: includes/Recommended/views/content.php:94
+msgctxt "plugin"
+msgid "Cannot Update"
+msgstr ""
+
+#: includes/Recommended/views/content.php:111
+msgctxt "plugin"
+msgid "Activated"
+msgstr ""
+
+#: includes/Recommended/views/content.php:116
+msgid "Activate"
+msgstr ""
+
+#. translators: %s: Plugin name.
+#: includes/Recommended/views/content.php:118
+#, php-format
+msgctxt "plugin"
+msgid "Activate %s"
+msgstr ""
+
+#: includes/Recommended/views/content.php:129
+msgid "Network Activate"
+msgstr ""
+
+#. translators: %s: Plugin name.
+#: includes/Recommended/views/content.php:131
+#, php-format
+msgctxt "plugin"
+msgid "Network Activate %s"
+msgstr ""
+
+#: includes/Recommended/views/content.php:144
+msgctxt "plugin"
+msgid "Cannot Activate"
+msgstr ""
+
+#: includes/Recommended/views/content.php:150
+msgctxt "plugin"
+msgid "Installed"
+msgstr ""
+
+#: includes/Recommended/views/content.php:180
+msgid "This plugin doesn&#8217;t work with your versions of WordPress and PHP."
+msgstr ""
+
+#. translators: 1: URL to WordPress Updates screen, 2: URL to Update PHP page.
+#: includes/Recommended/views/content.php:184
+#, php-format
+msgid ""
+"<a href=\"%1$s\">Please update WordPress</a>, and then <a href=\"%2$s"
+"\">learn more about updating PHP</a>."
+msgstr ""
+
+#. translators: %s: URL to WordPress Updates screen.
+#: includes/Recommended/views/content.php:192
+#: includes/Recommended/views/content.php:208
+#, php-format
+msgid "<a href=\"%s\">Please update WordPress</a>."
+msgstr ""
+
+#. translators: %s: URL to Update PHP page.
+#: includes/Recommended/views/content.php:198
+#: includes/Recommended/views/content.php:217
+#, php-format
+msgid "<a href=\"%s\">Learn more about updating PHP</a>."
+msgstr ""
+
+#: includes/Recommended/views/content.php:204
+msgid "This plugin doesn&#8217;t work with your version of WordPress."
+msgstr ""
+
+#: includes/Recommended/views/content.php:213
+msgid "This plugin doesn&#8217;t work with your version of PHP."
+msgstr ""
+
 #: includes/Settings.php:63 includes/Settings.php:90
 msgid "Settings"
 msgstr ""
@@ -269,6 +423,10 @@ msgstr ""
 
 #: includes/Settings.php:89
 msgid "Floating Widget"
+msgstr ""
+
+#: includes/Settings.php:199
+msgid "Select posts to display the widget"
 msgstr ""
 
 #: includes/Upgrade.php:72
@@ -321,7 +479,7 @@ msgid "Access Facebook for Business and view recorded events in Event Manager"
 msgstr ""
 
 #: views/analytics.php:36 views/design-settings.php:144
-#: views/display-settings.php:93 views/url-settings.php:43
+#: views/display-settings.php:99 views/url-settings.php:43
 #: views/woocommerce-button.php:67
 msgid "Save Changes"
 msgstr ""
@@ -403,7 +561,7 @@ msgid "Show on mobile"
 msgstr ""
 
 #: views/display-settings.php:31
-msgid "Display"
+msgid "Display on Pages"
 msgstr ""
 
 #: views/display-settings.php:34
@@ -418,6 +576,10 @@ msgstr ""
 msgid ""
 "Please select 'Show on all pages except' if you want to display the widget "
 "on WooCommerce pages."
+msgstr ""
+
+#: views/display-settings.php:92
+msgid "Display on Posts (PRO)"
 msgstr ""
 
 #: views/floating-widget-settings.php:14

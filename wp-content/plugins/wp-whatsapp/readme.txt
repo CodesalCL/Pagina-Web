@@ -2,8 +2,8 @@
 Contributors: ninjateam
 Tags: whatsapp, whatsapp chat, woocommerce whatsapp, click to chat, whatsapp business, whats app, wame, wp social chat, join chat, wp whatsapp
 Requires at least: 3.0
-Tested up to: 6.0
-Stable tag: 3.2
+Tested up to: 6.1
+Stable tag: 3.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -131,6 +131,9 @@ Definitely yes! The pro version comes with cutting edge features and performance
 3. WhatsApp Gutenberg Block Demo
 
 == Changelog ==
+
+= Nov 15, 2022 - Version 3.2.1 =
+- Added: Some recommended plugins
 
 = Jul 13, 2022 - Version 3.2 =
 - Added: Validate fields

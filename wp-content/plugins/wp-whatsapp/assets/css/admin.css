@@ -479,3 +479,8 @@ input.njt-wa-pro:checked::before{
 #app-preview .nta-wa-gdpr p:first-child {
   display: inline;
 }
+
+.nta-tabs-content #njt-post-selector{
+  max-width: 100%;
+  width: 100%;
+}

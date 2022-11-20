@@ -181,7 +181,7 @@ class Settings
                 'underscore', 
                 'jquery-ui-tabs',
                 'jquery-ui-sortable', 
-                'jquery-ui-autocomplete'
+                'jquery-ui-autocomplete',
             ], 
             NTA_WHATSAPP_VERSION,
             true
@@ -195,6 +195,9 @@ class Settings
                 ]
             ],
             'timezone' => $timezone,
+            'i18n' => array(
+                'select_post' => __('Select posts to display the widget', 'ninjateam-whatsapp')
+            )
         ]);
         wp_enqueue_script('nta-wa-js');
         wp_enqueue_script('jquery-validate', NTA_WHATSAPP_PLUGIN_URL . 'assets/libs/jquery.validate.min.js');
@@ -299,11 +302,13 @@ class Settings
 
         $excludePages = Helper::sanitize_array($_POST['excludePages']);
         $includePages = Helper::sanitize_array($_POST['includePages']);
+        $includePosts = Helper::sanitize_array($_POST['includePosts']);
 
         $new_input = Fields::getWidgetDisplay();
         $new_input['displayCondition'] = sanitize_text_field($_POST['displayCondition']);
         $new_input['excludePages'] = empty($excludePages) ? array() : $excludePages;
         $new_input['includePages'] = empty($includePages) ? array() : $includePages;
+        $new_input['includePosts'] = empty($includePosts) ? array() : $includePosts;
         $new_input['showOnDesktop'] = isset($_POST['showOnDesktop']) ? 'ON' : 'OFF';
         $new_input['showOnMobile'] = isset($_POST['showOnMobile']) ? 'ON' : 'OFF';
 
@@ -419,9 +424,9 @@ class Settings
                 'accountName' => $account->post_title,
                 'edit_link' => get_edit_post_link($account->ID),
                 'avatar' => $avatar !== false ? $avatar : '',
-                'widget_show' => $wg_show,
+                'widget_show' => empty($wg_show) ? 'OFF' : $wg_show,
                 'widget_position' => $wg_position,
-                'wc_show' => $wc_show,
+                'wc_show' => empty($wc_show) ? 'OFF' : $wc_show,
                 'wc_position' => $wc_position,
             ),$meta);
         }, $accountsList);
@@ -434,6 +439,18 @@ class Settings
         $id = sanitize_text_field($_POST['accountId']);
         $type = sanitize_text_field($_POST['type']);
         $status = sanitize_text_field($_POST['status']);
+
+        $wg_position = get_post_meta($id, 'nta_wa_widget_position', true);
+        $wc_position = get_post_meta($id, 'nta_wa_wc_position', true);
+
+        if ('' === $wg_position) {
+            update_post_meta($id, "nta_wa_widget_position", 0);
+        }
+
+        if ('' === $wc_position) {
+            update_post_meta($id, "nta_wa_wc_position", 0);
+        }
+
         update_post_meta($id, "nta_wa_{$type}", $status);
         wp_send_json_success();
     }

@@ -45,6 +45,7 @@ class Fields
                 'displayCondition' => 'excludePages',
                 'includePages' => [],
                 'excludePages' => [],
+                'includePosts' => [],
                 'showOnDesktop' => 'ON',
                 'showOnMobile' => 'ON',
                 'time_symbols' => 'h:m',
