@@ -2,3 +2,7 @@
 Stack trace:
 #0 {main}
   thrown in /home/codesalc/public_html/wp-includes/template-loader.php on line 7
+[30-Nov-2022 20:15:24 UTC] PHP Fatal error:  Uncaught Error: Undefined constant "ABSPATH" in /home/codesalc/public_html/wp-includes/compat.php:337
+Stack trace:
+#0 {main}
+  thrown in /home/codesalc/public_html/wp-includes/compat.php on line 337
