@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Themes - Inspiro package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2022-08-20 08:51:29+0000\n"
+"PO-Revision-Date: 2022-09-03 19:04:51+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,6 +20,18 @@ msgstr "Inspiro es un tema profesional y ligero para WordPress, centrado en la f
 #, gp-priority: high
 msgid "Inspiro"
 msgstr "Inspiro"
+
+#: inc/customizer/configs/header/class-inspiro-header-area-config.php:148
+msgid "Fullscreen"
+msgstr "Pantalla completa"
+
+#: inc/customizer/configs/header/class-inspiro-header-area-config.php:147
+msgid "Fixed height"
+msgstr "Altura fija"
+
+#: inc/customizer/configs/header/class-inspiro-header-area-config.php:143
+msgid "Featured Image Height in Posts and Pages"
+msgstr "Altura de la imagen destacada en entradas y páginas"
 
 #: inc/customizer/configs/colors/class-inspiro-header-button-color-config.php:226
 msgid "👉 Unlock all customizations"

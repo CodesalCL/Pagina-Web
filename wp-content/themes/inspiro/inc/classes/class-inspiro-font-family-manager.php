@@ -53,54 +53,119 @@ if ( ! class_exists( 'Inspiro_Font_Family_Manager' ) ) {
 		public static function get_system_fonts() {
 			if ( empty( self::$system_fonts ) ) {
 				self::$system_fonts = array(
-					'Helvetica' => array(
-						'fallback' => 'Verdana, Arial, sans-serif',
-						'weights'  => array(
-							'300',
-							'400',
-							'700',
-						),
-					),
-					'Verdana'   => array(
-						'fallback' => 'Helvetica, Arial, sans-serif',
-						'weights'  => array(
-							'300',
-							'400',
-							'700',
-						),
-					),
+                    'System Font Stack (sans-serif)'      => array(
+                        'stack' => '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif',
+                        'weights'  => array(
+                            '100',
+                            '200',
+                            '300',
+                            '400',
+                            '500',
+                            '600',
+                            '700',
+                            '800',
+                            '900',
+                        ),
+                    ),
+                    'Serif'           => array(
+                        'stack' => '"Georgia", Times, "Times New Roman", serif',
+                        'weights'  => array(
+                            '400',
+                            '500',
+                            '600',
+                            '700',
+                            '800',
+                        ),
+                    ),
 					'Arial'     => array(
-						'fallback' => 'Helvetica, Verdana, sans-serif',
+						'stack' => 'Arial, Helvetica, sans-serif  ',
 						'weights'  => array(
 							'300',
 							'400',
 							'700',
 						),
 					),
-					'Times'     => array(
-						'fallback' => 'Georgia, serif',
+					'Arial Black'     => array(
+						'stack' => '"Arial Black", Arial, sans-serif',
 						'weights'  => array(
 							'300',
 							'400',
 							'700',
 						),
 					),
-					'Georgia'   => array(
-						'fallback' => 'Times, serif',
+                    'Courier'   => array(
+                        'stack' => 'Courier, monospace',
+                        'weights'  => array(
+                            '300',
+                            '400',
+                            '700',
+                        ),
+                    ),
+                    'Courier New'     => array(
+                        'stack' => '"Courier New", Courier, monospace',
+                        'weights'  => array(
+                            '400',
+                            '700',
+                        ),
+                    ),
+                    'Georgia'   => array(
+                        'stack' => 'Georgia, serif',
+                        'weights'  => array(
+                            '300',
+                            '400',
+                            '700',
+                        ),
+                    ),
+                    'Impact'          => array(
+                        'stack' => 'Impact, Charcoal, sans-serif',
+                        'weights'  => array(
+                            '700',
+                        ),
+                    ),
+					'Lucida Console'  => array(
+                        'stack' => '"Lucida Console", Monaco, monospace',
+                        'weights'  => array(
+                            '400',
+                            '700',
+                        ),
+                    ),
+                    'Palatino Linotype'        => array(
+                        'stack' => '"Palatino Linotype", Palatino, "Book Antiqua", serif',
+                        'weights'  => array(
+                            '400',
+                            '700',
+                        ),
+                    ),
+					'Times New Roman'     => array(
+						'stack' => '"Times New Roman", Times, serif',
 						'weights'  => array(
 							'300',
 							'400',
 							'700',
 						),
 					),
-					'Courier'   => array(
-						'fallback' => 'monospace',
+					'Tahoma'          => array(
+						'stack' => 'Tahoma, Geneva, sans-serif',
 						'weights'  => array(
-							'300',
 							'400',
 							'700',
 						),
 					),
+					'Trebuchet MS'    => array(
+						'stack' => '"Trebuchet MS", Helvetica, sans-serif',
+						'weights'  => array(
+							'400',
+							'700',
+						),
+					),
+                    'Verdana'   => array(
+                        'stack' => 'Verdana, Arial, sans-serif',
+                        'weights'  => array(
+                            '300',
+                            '400',
+                            '700',
+                        ),
+                    )
 				);
 			}
 
