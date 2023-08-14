@@ -88,7 +88,7 @@ final class WP_Screen {
 	 * have a `$parent_base` of 'edit'.
 	 *
 	 * @since 3.3.0
-	 * @var string
+	 * @var string|null
 	 */
 	public $parent_base;
 
@@ -98,7 +98,7 @@ final class WP_Screen {
 	 * Some `$parent_file` values are 'edit.php?post_type=page', 'edit.php', and 'options-general.php'.
 	 *
 	 * @since 3.3.0
-	 * @var string
+	 * @var string|null
 	 */
 	public $parent_file;
 
@@ -143,7 +143,7 @@ final class WP_Screen {
 	 * The accessible hidden headings and text associated with the screen, if any.
 	 *
 	 * @since 4.4.0
-	 * @var array
+	 * @var string[]
 	 */
 	private $_screen_reader_content = array();
 
@@ -228,7 +228,7 @@ final class WP_Screen {
 			$post_type = $id;
 			$id        = 'post'; // Changes later. Ends up being $base.
 		} else {
-			if ( '.php' === substr( $id, -4 ) ) {
+			if ( str_ends_with( $id, '.php' ) ) {
 				$id = substr( $id, 0, -4 );
 			}
 
@@ -239,16 +239,16 @@ final class WP_Screen {
 		}
 
 		if ( ! $post_type && $hook_name ) {
-			if ( '-network' === substr( $id, -8 ) ) {
+			if ( str_ends_with( $id, '-network' ) ) {
 				$id       = substr( $id, 0, -8 );
 				$in_admin = 'network';
-			} elseif ( '-user' === substr( $id, -5 ) ) {
+			} elseif ( str_ends_with( $id, '-user' ) ) {
 				$id       = substr( $id, 0, -5 );
 				$in_admin = 'user';
 			}
 
 			$id = sanitize_key( $id );
-			if ( 'edit-comments' !== $id && 'edit-tags' !== $id && 'edit-' === substr( $id, 0, 5 ) ) {
+			if ( 'edit-comments' !== $id && 'edit-tags' !== $id && str_starts_with( $id, 'edit-' ) ) {
 				$maybe = substr( $id, 5 );
 				if ( taxonomy_exists( $maybe ) ) {
 					$id       = 'edit-tags';
@@ -718,7 +718,7 @@ final class WP_Screen {
 	 *
 	 * @see set_screen_reader_content() For more information on the array format.
 	 *
-	 * @return array An associative array of screen reader text strings.
+	 * @return string[] An associative array of screen reader text strings.
 	 */
 	public function get_screen_reader_content() {
 		return $this->_screen_reader_content;
@@ -1113,8 +1113,9 @@ final class WP_Screen {
 		<legend><?php _e( 'Screen elements' ); ?></legend>
 		<p>
 			<?php _e( 'Some screen elements can be shown or hidden by using the checkboxes.' ); ?>
-			<?php _e( 'They can be expanded and collapsed by clickling on their headings, and arranged by dragging their headings or by clicking on the up and down arrows.' ); ?>
+			<?php _e( 'Expand or collapse the elements by clicking on their headings, and arrange them by dragging their headings or by clicking on the up and down arrows.' ); ?>
 		</p>
+		<div class="metabox-prefs-container">
 		<?php
 
 		meta_box_prefs( $this );
@@ -1134,6 +1135,7 @@ final class WP_Screen {
 			echo _x( 'Welcome', 'Welcome panel' ) . "</label>\n";
 		}
 		?>
+		</div>
 		</fieldset>
 		<?php
 	}

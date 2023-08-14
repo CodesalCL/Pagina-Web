@@ -404,14 +404,12 @@ const bold = {
   tagName: 'strong',
   className: null,
 
-  edit(_ref) {
-    let {
-      isActive,
-      value,
-      onChange,
-      onFocus
-    } = _ref;
-
+  edit({
+    isActive,
+    value,
+    onChange,
+    onFocus
+  }) {
     function onToggle() {
       onChange(Object(external_wp_richText_["toggleFormat"])(value, {
         type: bold_name,
@@ -475,14 +473,17 @@ const code_code = {
       start,
       text
     } = value;
-    const characterBefore = text.slice(start - 1, start); // Quick check the text for the necessary character.
+    const characterBefore = text[start - 1]; // Quick check the text for the necessary character.
 
     if (characterBefore !== BACKTICK) {
       return value;
     }
 
-    const textBefore = text.slice(0, start - 1);
-    const indexBefore = textBefore.lastIndexOf(BACKTICK);
+    if (start - 2 < 0) {
+      return value;
+    }
+
+    const indexBefore = text.lastIndexOf(BACKTICK, start - 2);
 
     if (indexBefore === -1) {
       return value;
@@ -503,14 +504,12 @@ const code_code = {
     return value;
   },
 
-  edit(_ref) {
-    let {
-      value,
-      onChange,
-      onFocus,
-      isActive
-    } = _ref;
-
+  edit({
+    value,
+    onChange,
+    onFocus,
+    isActive
+  }) {
     function onClick() {
       onChange(Object(external_wp_richText_["toggleFormat"])(value, {
         type: code_name,
@@ -569,24 +568,22 @@ const image_image = {
   edit: Edit
 };
 
-function InlineUI(_ref) {
-  let {
-    value,
-    onChange,
-    activeObjectAttributes,
-    contentRef
-  } = _ref;
+function InlineUI({
+  value,
+  onChange,
+  activeObjectAttributes,
+  contentRef
+}) {
   const {
     style
   } = activeObjectAttributes;
-  const [width, setWidth] = Object(external_wp_element_["useState"])(style === null || style === void 0 ? void 0 : style.replace(/\D/g, ''));
-  const anchorRef = Object(external_wp_richText_["useAnchorRef"])({
-    ref: contentRef,
-    value,
+  const [width, setWidth] = (0,external_wp_element_namespaceObject.useState)(style?.replace(/\D/g, ''));
+  const popoverAnchor = (0,external_wp_richText_namespaceObject.useAnchor)({
+    editableContentElement: contentRef.current,
     settings: image_image
   });
-  return Object(external_wp_element_["createElement"])(external_wp_components_["Popover"], {
-    position: "bottom center",
+  return (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.Popover, {
+    placement: "bottom",
     focusOnMount: false,
     anchorRef: anchorRef,
     className: "block-editor-format-toolbar__image-popover"
@@ -605,30 +602,32 @@ function InlineUI(_ref) {
       });
       event.preventDefault();
     }
-  }, Object(external_wp_element_["createElement"])(external_wp_components_["TextControl"], {
+  }, (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.__experimentalHStack, {
+    alignment: "bottom",
+    spacing: "0"
+  }, (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.__experimentalNumberControl, {
     className: "block-editor-format-toolbar__image-container-value",
-    type: "number",
-    label: Object(external_wp_i18n_["__"])('Width'),
+    label: (0,external_wp_i18n_namespaceObject.__)('Width'),
     value: width,
     min: 1,
     onChange: newWidth => setWidth(newWidth)
-  }), Object(external_wp_element_["createElement"])(external_wp_components_["Button"], {
-    icon: keyboard_return["a" /* default */],
-    label: Object(external_wp_i18n_["__"])('Apply'),
+  }), (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
+    className: "block-editor-format-toolbar__image-container-button",
+    icon: keyboard_return,
+    label: (0,external_wp_i18n_namespaceObject.__)('Apply'),
     type: "submit"
-  })));
+  }))));
 }
 
-function Edit(_ref2) {
-  let {
-    value,
-    onChange,
-    onFocus,
-    isObjectActive,
-    activeObjectAttributes,
-    contentRef
-  } = _ref2;
-  const [isModalOpen, setIsModalOpen] = Object(external_wp_element_["useState"])(false);
+function Edit({
+  value,
+  onChange,
+  onFocus,
+  isObjectActive,
+  activeObjectAttributes,
+  contentRef
+}) {
+  const [isModalOpen, setIsModalOpen] = (0,external_wp_element_namespaceObject.useState)(false);
 
   function openModal() {
     setIsModalOpen(true);
@@ -650,13 +649,12 @@ function Edit(_ref2) {
     isActive: isObjectActive
   }), isModalOpen && Object(external_wp_element_["createElement"])(external_wp_blockEditor_["MediaUpload"], {
     allowedTypes: ALLOWED_MEDIA_TYPES,
-    onSelect: _ref3 => {
-      let {
-        id,
-        url,
-        alt,
-        width: imgWidth
-      } = _ref3;
+    onSelect: ({
+      id,
+      url,
+      alt,
+      width: imgWidth
+    }) => {
       closeModal();
       onChange(Object(external_wp_richText_["insertObject"])(value, {
         type: image_name,
@@ -670,10 +668,9 @@ function Edit(_ref2) {
       onFocus();
     },
     onClose: closeModal,
-    render: _ref4 => {
-      let {
-        open
-      } = _ref4;
+    render: ({
+      open
+    }) => {
       open();
       return null;
     }
@@ -720,14 +717,12 @@ const italic = {
   tagName: 'em',
   className: null,
 
-  edit(_ref) {
-    let {
-      isActive,
-      value,
-      onChange,
-      onFocus
-    } = _ref;
-
+  edit({
+    isActive,
+    value,
+    onChange,
+    onFocus
+  }) {
     function onToggle() {
       onChange(Object(external_wp_richText_["toggleFormat"])(value, {
         type: italic_name,
@@ -771,8 +766,13 @@ var external_wp_htmlEntities_ = __webpack_require__("rmEH");
 // EXTERNAL MODULE: ./node_modules/@wordpress/icons/build-module/library/link-off.js
 var link_off = __webpack_require__("Mp0b");
 
-// EXTERNAL MODULE: ./node_modules/@wordpress/icons/build-module/library/link.js
-var library_link = __webpack_require__("Bpkj");
+const linkOff = (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 24 24"
+}, (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
+  d: "M17.031 4.703 15.576 4l-1.56 3H14v.03l-2.324 4.47H9.5V13h1.396l-1.502 2.889h-.95a3.694 3.694 0 0 1 0-7.389H10V7H8.444a5.194 5.194 0 1 0 0 10.389h.17L7.5 19.53l1.416.719L15.049 8.5h.507a3.694 3.694 0 0 1 0 7.39H14v1.5h1.556a5.194 5.194 0 0 0 .273-10.383l1.202-2.304Z"
+}));
+/* harmony default export */ var link_off = (linkOff);
 
 // EXTERNAL MODULE: external ["wp","a11y"]
 var external_wp_a11y_ = __webpack_require__("gdqT");
@@ -788,6 +788,19 @@ var external_lodash_ = __webpack_require__("YLtl");
  * External dependencies
  */
 
+const link_link = (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 24 24"
+}, (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
+  d: "M10 17.389H8.444A5.194 5.194 0 1 1 8.444 7H10v1.5H8.444a3.694 3.694 0 0 0 0 7.389H10v1.5ZM14 7h1.556a5.194 5.194 0 0 1 0 10.39H14v-1.5h1.556a3.694 3.694 0 0 0 0-7.39H14V7Zm-4.5 6h5v-1.5h-5V13Z"
+}));
+/* harmony default export */ var library_link = (link_link);
+
+;// CONCATENATED MODULE: external ["wp","a11y"]
+var external_wp_a11y_namespaceObject = window["wp"]["a11y"];
+;// CONCATENATED MODULE: external ["wp","data"]
+var external_wp_data_namespaceObject = window["wp"]["data"];
+;// CONCATENATED MODULE: ./node_modules/@wordpress/format-library/build-module/link/utils.js
 /**
  * WordPress dependencies
  */
@@ -870,13 +883,12 @@ function isValidHref(href) {
  * @return {Object} The final format object.
  */
 
-function createLinkFormat(_ref) {
-  let {
-    url,
-    type,
-    id,
-    opensInNewWindow
-  } = _ref;
+function createLinkFormat({
+  url,
+  type,
+  id,
+  opensInNewWindow
+}) {
   const format = {
     type: 'core/link',
     attributes: {
@@ -908,9 +920,7 @@ function createLinkFormat(_ref) {
 
 /* eslint-enable jsdoc/no-undefined-types */
 
-function getFormatBoundary(value, format) {
-  let startIndex = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : value.start;
-  let endIndex = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : value.end;
+function getFormatBoundary(value, format, startIndex = value.start, endIndex = value.end) {
   const EMPTY_BOUNDARIES = {
     start: null,
     end: null
@@ -921,21 +931,21 @@ function getFormatBoundary(value, format) {
   let targetFormat;
   let initialIndex;
 
-  if (!(formats !== null && formats !== void 0 && formats.length)) {
+  if (!formats?.length) {
     return EMPTY_BOUNDARIES;
   } // Clone formats to avoid modifying source formats.
 
 
   const newFormats = formats.slice();
-  const formatAtStart = Object(external_lodash_["find"])(newFormats[startIndex], {
-    type: format.type
-  });
-  const formatAtEnd = Object(external_lodash_["find"])(newFormats[endIndex], {
-    type: format.type
-  });
-  const formatAtEndMinusOne = Object(external_lodash_["find"])(newFormats[endIndex - 1], {
-    type: format.type
-  });
+  const formatAtStart = newFormats[startIndex]?.find(({
+    type
+  }) => type === format.type);
+  const formatAtEnd = newFormats[endIndex]?.find(({
+    type
+  }) => type === format.type);
+  const formatAtEndMinusOne = newFormats[endIndex - 1]?.find(({
+    type
+  }) => type === format.type);
 
   if (!!formatAtStart) {
     // Set values to conform to "start"
@@ -1002,8 +1012,10 @@ function walkToBoundary(formats, initialIndex, targetFormatRef, formatIndex, dir
   return index;
 }
 
-const walkToStart = Object(external_lodash_["partialRight"])(walkToBoundary, 'backwards');
-const walkToEnd = Object(external_lodash_["partialRight"])(walkToBoundary, 'forwards');
+const partialRight = (fn, ...partialArgs) => (...args) => fn(...args, ...partialArgs);
+
+const walkToStart = partialRight(walkToBoundary, 'backwards');
+const walkToEnd = partialRight(walkToBoundary, 'forwards');
 
 // CONCATENATED MODULE: ./node_modules/@wordpress/format-library/build-module/link/use-link-instance-key.js
 // Weakly referenced map allows unused ids to be garbage collected.
@@ -1019,7 +1031,7 @@ function getKey(_id) {
  * Builds a unique link control key for the given object reference.
  *
  * @param {Object} instance an unique object reference specific to this link control instance.
- * @return {string} the unique key to use for this link control.
+ * @return {string | undefined} the unique key to use for this link control.
  */
 
 
@@ -1060,17 +1072,16 @@ function useLinkInstanceKey(instance) {
 
 
 
-function InlineLinkUI(_ref) {
-  let {
-    isActive,
-    activeAttributes,
-    addingLink,
-    value,
-    onChange,
-    speak,
-    stopAddingLink,
-    contentRef
-  } = _ref;
+function InlineLinkUI({
+  isActive,
+  activeAttributes,
+  addingLink,
+  value,
+  onChange,
+  speak,
+  stopAddingLink,
+  contentRef
+}) {
   const richLinkTextValue = getRichTextValueFromSelection(value, isActive); // Get the text content minus any HTML tags.
 
   const richTextText = richLinkTextValue.text;
@@ -1165,15 +1176,31 @@ function InlineLinkUI(_ref) {
           text: newText
         }); // Apply the new Link format to this new text value.
 
-        newValue = Object(external_wp_richText_["applyFormat"])(newValue, linkFormat, 0, newText.length); // Update the original (full) RichTextValue replacing the
+        newValue = (0,external_wp_richText_namespaceObject.applyFormat)(newValue, linkFormat, 0, newText.length); // Get the boundaries of the active link format.
+
+        const boundary = getFormatBoundary(value, {
+          type: 'core/link'
+        }); // Split the value at the start of the active link format.
+        // Passing "start" as the 3rd parameter is required to ensure
+        // the second half of the split value is split at the format's
+        // start boundary and avoids relying on the value's "end" property
+        // which may not correspond correctly.
+
+        const [valBefore, valAfter] = (0,external_wp_richText_namespaceObject.split)(value, boundary.start, boundary.start); // Update the original (full) RichTextValue replacing the
         // target text with the *new* RichTextValue containing:
         // 1. The new text content.
         // 2. The new link format.
+        // As "replace" will operate on the first match only, it is
+        // run only against the second half of the value which was
+        // split at the active format's boundary. This avoids a bug
+        // with incorrectly targetted replacements.
+        // See: https://github.com/WordPress/gutenberg/issues/41771.
         // Note original formats will be lost when applying this change.
         // That is expected behaviour.
         // See: https://github.com/WordPress/gutenberg/pull/33849#issuecomment-936134179.
 
-        newValue = Object(external_wp_richText_["replace"])(value, richTextText, newValue);
+        const newValAfter = (0,external_wp_richText_namespaceObject.replace)(valAfter, richTextText, newValue);
+        newValue = (0,external_wp_richText_namespaceObject.concat)(valBefore, newValAfter);
       }
 
       newValue.start = newValue.end;
@@ -1196,10 +1223,9 @@ function InlineLinkUI(_ref) {
     }
   }
 
-  const anchorRef = Object(external_wp_richText_["useAnchorRef"])({
-    ref: contentRef,
-    value,
-    settings: link_link
+  const popoverAnchor = (0,external_wp_richText_namespaceObject.useAnchor)({
+    editableContentElement: contentRef.current,
+    settings: build_module_link_link
   }); // Generate a string based key that is unique to this anchor reference.
   // This is used to force re-mount the LinkControl component to avoid
   // potential stale state bugs caused by the component not being remounted
@@ -1227,8 +1253,8 @@ function InlineLinkUI(_ref) {
   function createButtonText(searchTerm) {
     return Object(external_wp_element_["createInterpolateElement"])(Object(external_wp_i18n_["sprintf"])(
     /* translators: %s: search term. */
-    Object(external_wp_i18n_["__"])('Create Page: <mark>%s</mark>'), searchTerm), {
-      mark: Object(external_wp_element_["createElement"])("mark", null)
+    (0,external_wp_i18n_namespaceObject.__)('Create page: <mark>%s</mark>'), searchTerm), {
+      mark: (0,external_wp_element_namespaceObject.createElement)("mark", null)
     });
   }
 
@@ -1236,8 +1262,10 @@ function InlineLinkUI(_ref) {
     anchorRef: anchorRef,
     focusOnMount: focusOnMount.current,
     onClose: stopAddingLink,
-    position: "bottom center"
-  }, Object(external_wp_element_["createElement"])(external_wp_blockEditor_["__experimentalLinkControl"], {
+    onFocusOutside: () => stopAddingLink(false),
+    placement: "bottom",
+    shift: true
+  }, (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.__experimentalLinkControl, {
     key: forceRemountKey,
     value: linkValue,
     onChange: onChangeLink,
@@ -1298,16 +1326,15 @@ const link_name = 'core/link';
 
 const link_title = Object(external_wp_i18n_["__"])('Link');
 
-function link_Edit(_ref) {
-  let {
-    isActive,
-    activeAttributes,
-    value,
-    onChange,
-    onFocus,
-    contentRef
-  } = _ref;
-  const [addingLink, setAddingLink] = Object(external_wp_element_["useState"])(false);
+function link_Edit({
+  isActive,
+  activeAttributes,
+  value,
+  onChange,
+  onFocus,
+  contentRef
+}) {
+  const [addingLink, setAddingLink] = (0,external_wp_element_namespaceObject.useState)(false);
 
   function addLink() {
     const text = Object(external_wp_richText_["getTextContent"])(Object(external_wp_richText_["slice"])(value));
@@ -1331,9 +1358,12 @@ function link_Edit(_ref) {
     }
   }
 
-  function stopAddingLink() {
+  function stopAddingLink(returnFocus = true) {
     setAddingLink(false);
-    onFocus();
+
+    if (returnFocus) {
+      onFocus();
+    }
   }
 
   function onRemoveFormat() {
@@ -1388,13 +1418,11 @@ const link_link = {
     target: 'target'
   },
 
-  __unstablePasteRule(value, _ref2) {
-    let {
-      html,
-      plainText
-    } = _ref2;
-
-    if (Object(external_wp_richText_["isCollapsed"])(value)) {
+  __unstablePasteRule(value, {
+    html,
+    plainText
+  }) {
+    if ((0,external_wp_richText_namespaceObject.isCollapsed)(value)) {
       return value;
     }
 
@@ -1440,14 +1468,12 @@ const strikethrough = {
   tagName: 's',
   className: null,
 
-  edit(_ref) {
-    let {
-      isActive,
-      value,
-      onChange,
-      onFocus
-    } = _ref;
-
+  edit({
+    isActive,
+    value,
+    onChange,
+    onFocus
+  }) {
     function onClick() {
       onChange(Object(external_wp_richText_["toggleFormat"])(value, {
         type: strikethrough_name,
@@ -1489,12 +1515,10 @@ const underline = {
     style: 'style'
   },
 
-  edit(_ref) {
-    let {
-      value,
-      onChange
-    } = _ref;
-
+  edit({
+    value,
+    onChange
+  }) {
     const onToggle = () => {
       onChange(Object(external_wp_richText_["toggleFormat"])(value, {
         type: underline_name,
@@ -1520,7 +1544,33 @@ const underline = {
 // EXTERNAL MODULE: ./node_modules/@wordpress/icons/build-module/icon/index.js
 var icon = __webpack_require__("iClF");
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/icons/build-module/library/text-color.js
+/** @typedef {{icon: JSX.Element, size?: number} & import('@wordpress/primitives').SVGProps} IconProps */
+
+/**
+ * Return an SVG icon.
+ *
+ * @param {IconProps} props icon is the SVG component to render
+ *                          size is a number specifiying the icon size in pixels
+ *                          Other props will be passed to wrapped SVG component
+ *
+ * @return {JSX.Element}  Icon component
+ */
+
+function Icon({
+  icon,
+  size = 24,
+  ...props
+}) {
+  return (0,external_wp_element_namespaceObject.cloneElement)(icon, {
+    width: size,
+    height: size,
+    ...props
+  });
+}
+
+/* harmony default export */ var icon = (Icon);
+
+;// CONCATENATED MODULE: ./node_modules/@wordpress/icons/build-module/library/text-color.js
 
 
 /**
@@ -1535,7 +1585,22 @@ const textColor = Object(external_wp_element_["createElement"])(external_wp_prim
 }));
 /* harmony default export */ var text_color = (textColor);
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/format-library/build-module/text-color/inline.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/icons/build-module/library/color.js
+
+
+/**
+ * WordPress dependencies
+ */
+
+const color = (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
+  viewBox: "0 0 24 24",
+  xmlns: "http://www.w3.org/2000/svg"
+}, (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
+  d: "M17.2 10.9c-.5-1-1.2-2.1-2.1-3.2-.6-.9-1.3-1.7-2.1-2.6L12 4l-1 1.1c-.6.9-1.3 1.7-2 2.6-.8 1.2-1.5 2.3-2 3.2-.6 1.2-1 2.2-1 3 0 3.4 2.7 6.1 6.1 6.1s6.1-2.7 6.1-6.1c0-.8-.3-1.8-1-3zm-5.1 7.6c-2.5 0-4.6-2.1-4.6-4.6 0-.3.1-1 .8-2.3.5-.9 1.1-1.9 2-3.1.7-.9 1.3-1.7 1.8-2.3.7.8 1.3 1.6 1.8 2.3.8 1.1 1.5 2.2 2 3.1.7 1.3.8 2 .8 2.3 0 2.5-2.1 4.6-4.6 4.6z"
+}));
+/* harmony default export */ var library_color = (color);
+
+;// CONCATENATED MODULE: ./node_modules/@wordpress/format-library/build-module/text-color/inline.js
 
 
 /**
@@ -1558,8 +1623,7 @@ const textColor = Object(external_wp_element_["createElement"])(external_wp_prim
 
 
 
-function parseCSS() {
-  let css = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+function parseCSS(css = '') {
   return css.split(';').reduce((accumulator, rule) => {
     if (rule) {
       const [property, value] = rule.split(':');
@@ -1571,9 +1635,7 @@ function parseCSS() {
   }, {});
 }
 
-function parseClassName() {
-  let className = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-  let colorSettings = arguments.length > 1 ? arguments[1] : undefined;
+function parseClassName(className = '', colorSettings) {
   return className.split(' ').reduce((accumulator, name) => {
     // `colorSlug` could contain dashes, so simply match the start and end.
     if (name.startsWith('has-') && name.endsWith('-color')) {
@@ -1639,14 +1701,15 @@ function setColors(value, name, colorSettings, colors) {
   });
 }
 
-function ColorPicker(_ref) {
-  let {
-    name,
-    property,
-    value,
-    onChange
-  } = _ref;
-  const colors = Object(external_wp_data_["useSelect"])(select => {
+function ColorPicker({
+  name,
+  property,
+  value,
+  onChange
+}) {
+  const colors = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    var _getSettings$colors;
+
     const {
       getSettings
     } = select(external_wp_blockEditor_["store"]);
@@ -1664,25 +1727,22 @@ function ColorPicker(_ref) {
   });
 }
 
-function InlineColorUI(_ref2) {
-  let {
-    name,
-    value,
-    onChange,
-    onClose,
-    contentRef
-  } = _ref2;
-
-  /* 
+function InlineColorUI({
+  name,
+  value,
+  onChange,
+  onClose,
+  contentRef
+}) {
+  /*
    As you change the text color by typing a HEX value into a field,
    the return value of document.getSelection jumps to the field you're editing,
    not the highlighted text. Given that useAnchorRef uses document.getSelection,
    it will return null, since it can't find the <mark> element within the HEX input.
    This caches the last truthy value of the selection anchor reference.
    */
-  const anchorRef = Object(external_wp_blockEditor_["useCachedTruthy"])(Object(external_wp_richText_["useAnchorRef"])({
-    ref: contentRef,
-    value,
+  const popoverAnchor = (0,external_wp_blockEditor_namespaceObject.useCachedTruthy)((0,external_wp_richText_namespaceObject.useAnchor)({
+    editableContentElement: contentRef.current,
     settings: text_color_textColor
   }));
   return Object(external_wp_element_["createElement"])(external_wp_components_["Popover"], {
@@ -1750,12 +1810,10 @@ function getComputedStyleProperty(element, property) {
   return value;
 }
 
-function fillComputedColors(element, _ref) {
-  let {
-    color,
-    backgroundColor
-  } = _ref;
-
+function fillComputedColors(element, {
+  color,
+  backgroundColor
+}) {
   if (!color && !backgroundColor) {
     return;
   }
@@ -1766,21 +1824,20 @@ function fillComputedColors(element, _ref) {
   };
 }
 
-function TextColorEdit(_ref2) {
-  let {
-    value,
-    onChange,
-    isActive,
-    activeAttributes,
-    contentRef
-  } = _ref2;
-  const allowCustomControl = Object(external_wp_blockEditor_["useSetting"])('color.custom');
-  const colors = Object(external_wp_blockEditor_["useSetting"])('color.palette') || EMPTY_ARRAY;
-  const [isAddingColor, setIsAddingColor] = Object(external_wp_element_["useState"])(false);
-  const enableIsAddingColor = Object(external_wp_element_["useCallback"])(() => setIsAddingColor(true), [setIsAddingColor]);
-  const disableIsAddingColor = Object(external_wp_element_["useCallback"])(() => setIsAddingColor(false), [setIsAddingColor]);
-  const colorIndicatorStyle = Object(external_wp_element_["useMemo"])(() => fillComputedColors(contentRef.current, getActiveColors(value, text_color_name, colors)), [value, colors]);
-  const hasColorsToChoose = !Object(external_lodash_["isEmpty"])(colors) || !allowCustomControl;
+function TextColorEdit({
+  value,
+  onChange,
+  isActive,
+  activeAttributes,
+  contentRef
+}) {
+  const allowCustomControl = (0,external_wp_blockEditor_namespaceObject.useSetting)('color.custom');
+  const colors = (0,external_wp_blockEditor_namespaceObject.useSetting)('color.palette') || EMPTY_ARRAY;
+  const [isAddingColor, setIsAddingColor] = (0,external_wp_element_namespaceObject.useState)(false);
+  const enableIsAddingColor = (0,external_wp_element_namespaceObject.useCallback)(() => setIsAddingColor(true), [setIsAddingColor]);
+  const disableIsAddingColor = (0,external_wp_element_namespaceObject.useCallback)(() => setIsAddingColor(false), [setIsAddingColor]);
+  const colorIndicatorStyle = (0,external_wp_element_namespaceObject.useMemo)(() => fillComputedColors(contentRef.current, getActiveColors(value, text_color_name, colors)), [value, colors]);
+  const hasColorsToChoose = colors.length || !allowCustomControl;
 
   if (!hasColorsToChoose && !isActive) {
     return null;
@@ -1789,8 +1846,8 @@ function TextColorEdit(_ref2) {
   return Object(external_wp_element_["createElement"])(external_wp_element_["Fragment"], null, Object(external_wp_element_["createElement"])(external_wp_blockEditor_["RichTextToolbarButton"], {
     className: "format-library-text-color-button",
     isActive: isActive,
-    icon: Object(external_wp_element_["createElement"])(icon["a" /* default */], {
-      icon: text_color,
+    icon: (0,external_wp_element_namespaceObject.createElement)(icon, {
+      icon: Object.keys(activeAttributes).length ? text_color : library_color,
       style: colorIndicatorStyle
     }),
     title: text_color_title // If has no colors to choose but a color is active remove the color onClick
@@ -1874,14 +1931,12 @@ const subscript_subscript = {
   tagName: 'sub',
   className: null,
 
-  edit(_ref) {
-    let {
-      isActive,
-      value,
-      onChange,
-      onFocus
-    } = _ref;
-
+  edit({
+    isActive,
+    value,
+    onChange,
+    onFocus
+  }) {
     function onToggle() {
       onChange(Object(external_wp_richText_["toggleFormat"])(value, {
         type: subscript_name,
@@ -1940,14 +1995,12 @@ const superscript_superscript = {
   tagName: 'sup',
   className: null,
 
-  edit(_ref) {
-    let {
-      isActive,
-      value,
-      onChange,
-      onFocus
-    } = _ref;
-
+  edit({
+    isActive,
+    value,
+    onChange,
+    onFocus
+  }) {
     function onToggle() {
       onChange(Object(external_wp_richText_["toggleFormat"])(value, {
         type: superscript_name,
@@ -1971,8 +2024,20 @@ const superscript_superscript = {
 
 };
 
-// EXTERNAL MODULE: ./node_modules/@wordpress/icons/build-module/library/button.js
-var library_button = __webpack_require__("oMoS");
+;// CONCATENATED MODULE: ./node_modules/@wordpress/icons/build-module/library/button.js
+
+
+/**
+ * WordPress dependencies
+ */
+
+const button_button = (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
+  viewBox: "0 0 24 24",
+  xmlns: "http://www.w3.org/2000/svg"
+}, (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
+  d: "M8 12.5h8V11H8v1.5Z M19 6.5H5a2 2 0 0 0-2 2V15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.5a2 2 0 0 0-2-2ZM5 8h14a.5.5 0 0 1 .5.5V15a.5.5 0 0 1-.5.5H5a.5.5 0 0 1-.5-.5V8.5A.5.5 0 0 1 5 8Z"
+}));
+/* harmony default export */ var library_button = (button_button);
 
 // CONCATENATED MODULE: ./node_modules/@wordpress/format-library/build-module/keyboard/index.js
 
@@ -1994,14 +2059,12 @@ const keyboard = {
   tagName: 'kbd',
   className: null,
 
-  edit(_ref) {
-    let {
-      isActive,
-      value,
-      onChange,
-      onFocus
-    } = _ref;
-
+  edit({
+    isActive,
+    value,
+    onChange,
+    onFocus
+  }) {
     function onToggle() {
       onChange(Object(external_wp_richText_["toggleFormat"])(value, {
         type: keyboard_name,
@@ -2025,7 +2088,204 @@ const keyboard = {
 
 };
 
-// CONCATENATED MODULE: ./node_modules/@wordpress/format-library/build-module/default-formats.js
+;// CONCATENATED MODULE: ./node_modules/@wordpress/icons/build-module/library/help.js
+
+
+/**
+ * WordPress dependencies
+ */
+
+const help = (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 24 24"
+}, (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
+  d: "M12 4.75a7.25 7.25 0 100 14.5 7.25 7.25 0 000-14.5zM3.25 12a8.75 8.75 0 1117.5 0 8.75 8.75 0 01-17.5 0zM12 8.75a1.5 1.5 0 01.167 2.99c-.465.052-.917.44-.917 1.01V14h1.5v-.845A3 3 0 109 10.25h1.5a1.5 1.5 0 011.5-1.5zM11.25 15v1.5h1.5V15h-1.5z"
+}));
+/* harmony default export */ var library_help = (help);
+
+;// CONCATENATED MODULE: ./node_modules/@wordpress/format-library/build-module/unknown/index.js
+
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+const unknown_name = 'core/unknown';
+
+const unknown_title = (0,external_wp_i18n_namespaceObject.__)('Clear Unknown Formatting');
+
+const unknown = {
+  name: unknown_name,
+  title: unknown_title,
+  tagName: '*',
+  className: null,
+
+  edit({
+    isActive,
+    value,
+    onChange,
+    onFocus
+  }) {
+    function onClick() {
+      onChange((0,external_wp_richText_namespaceObject.removeFormat)(value, unknown_name));
+      onFocus();
+    }
+
+    const selectedValue = (0,external_wp_richText_namespaceObject.slice)(value);
+    const hasUnknownFormats = selectedValue.formats.some(formats => {
+      return formats.some(format => format.type === unknown_name);
+    });
+
+    if (!isActive && !hasUnknownFormats) {
+      return null;
+    }
+
+    return (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextToolbarButton, {
+      name: "unknown",
+      icon: library_help,
+      title: unknown_title,
+      onClick: onClick,
+      isActive: true
+    });
+  }
+
+};
+
+;// CONCATENATED MODULE: ./node_modules/@wordpress/icons/build-module/library/language.js
+
+
+/**
+ * WordPress dependencies
+ */
+
+const language = (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 24 24"
+}, (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
+  d: "M17.5 10h-1.7l-3.7 10.5h1.7l.9-2.6h3.9l.9 2.6h1.7L17.5 10zm-2.2 6.3 1.4-4 1.4 4h-2.8zm-4.8-3.8c1.6-1.8 2.9-3.6 3.7-5.7H16V5.2h-5.8V3H8.8v2.2H3v1.5h9.6c-.7 1.6-1.8 3.1-3.1 4.6C8.6 10.2 7.8 9 7.2 8H5.6c.6 1.4 1.7 2.9 2.9 4.4l-2.4 2.4c-.3.4-.7.8-1.1 1.2l1 1 1.2-1.2c.8-.8 1.6-1.5 2.3-2.3.8.9 1.7 1.7 2.5 2.5l.6-1.5c-.7-.6-1.4-1.3-2.1-2z"
+}));
+/* harmony default export */ var library_language = (language);
+
+;// CONCATENATED MODULE: ./node_modules/@wordpress/format-library/build-module/language/index.js
+
+
+/**
+ * WordPress dependencies
+ */
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+
+
+const language_name = 'core/language';
+
+const language_title = (0,external_wp_i18n_namespaceObject.__)('Language');
+
+const language_language = {
+  name: language_name,
+  tagName: 'bdo',
+  className: null,
+  edit: language_Edit,
+  title: language_title
+};
+
+function language_Edit({
+  isActive,
+  value,
+  onChange,
+  contentRef
+}) {
+  const [isPopoverVisible, setIsPopoverVisible] = (0,external_wp_element_namespaceObject.useState)(false);
+
+  const togglePopover = () => {
+    setIsPopoverVisible(state => !state);
+  };
+
+  return (0,external_wp_element_namespaceObject.createElement)(external_wp_element_namespaceObject.Fragment, null, (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextToolbarButton, {
+    icon: library_language,
+    label: language_title,
+    title: language_title,
+    onClick: () => {
+      if (isActive) {
+        onChange((0,external_wp_richText_namespaceObject.removeFormat)(value, language_name));
+      } else {
+        togglePopover();
+      }
+    },
+    isActive: isActive,
+    role: "menuitemcheckbox"
+  }), isPopoverVisible && (0,external_wp_element_namespaceObject.createElement)(InlineLanguageUI, {
+    value: value,
+    onChange: onChange,
+    onClose: togglePopover,
+    contentRef: contentRef
+  }));
+}
+
+function InlineLanguageUI({
+  value,
+  contentRef,
+  onChange,
+  onClose
+}) {
+  const popoverAnchor = (0,external_wp_richText_namespaceObject.useAnchor)({
+    editableContentElement: contentRef.current,
+    settings: language_language
+  });
+  const [lang, setLang] = (0,external_wp_element_namespaceObject.useState)('');
+  const [dir, setDir] = (0,external_wp_element_namespaceObject.useState)('ltr');
+  return (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.Popover, {
+    className: "block-editor-format-toolbar__language-popover",
+    anchor: popoverAnchor,
+    placement: "bottom",
+    onClose: onClose
+  }, (0,external_wp_element_namespaceObject.createElement)("form", {
+    className: "block-editor-format-toolbar__language-container-content",
+    onSubmit: event => {
+      event.preventDefault();
+      onChange((0,external_wp_richText_namespaceObject.applyFormat)(value, {
+        type: language_name,
+        attributes: {
+          lang,
+          dir
+        }
+      }));
+      onClose();
+    }
+  }, (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.TextControl, {
+    label: language_title,
+    value: lang,
+    onChange: val => setLang(val),
+    help: (0,external_wp_i18n_namespaceObject.__)('A valid language attribute, like "en" or "fr".')
+  }), (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.SelectControl, {
+    label: (0,external_wp_i18n_namespaceObject.__)('Text direction'),
+    value: dir,
+    options: [{
+      label: (0,external_wp_i18n_namespaceObject.__)('Left to right'),
+      value: 'ltr'
+    }, {
+      label: (0,external_wp_i18n_namespaceObject.__)('Right to left'),
+      value: 'rtl'
+    }],
+    onChange: val => setDir(val)
+  }), (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.__experimentalHStack, {
+    alignment: "right"
+  }, (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
+    variant: "primary",
+    type: "submit",
+    text: (0,external_wp_i18n_namespaceObject.__)('Apply')
+  }))));
+}
+
+;// CONCATENATED MODULE: ./node_modules/@wordpress/format-library/build-module/default-formats.js
 /**
  * Internal dependencies
  */
@@ -2040,7 +2300,9 @@ const keyboard = {
 
 
 
-/* harmony default export */ var default_formats = ([bold, code_code, image_image, italic, link_link, strikethrough, underline, text_color_textColor, subscript_subscript, superscript_superscript, keyboard]);
+
+
+/* harmony default export */ var default_formats = ([bold, code_code, image_image, italic, build_module_link_link, strikethrough, underline, text_color_textColor, subscript_subscript, superscript_superscript, keyboard, unknown, language_language]);
 
 // CONCATENATED MODULE: ./node_modules/@wordpress/format-library/build-module/index.js
 /**
@@ -2052,13 +2314,10 @@ const keyboard = {
  */
 
 
-default_formats.forEach(_ref => {
-  let {
-    name,
-    ...settings
-  } = _ref;
-  return Object(external_wp_richText_["registerFormatType"])(name, settings);
-});
+default_formats.forEach(({
+  name,
+  ...settings
+}) => (0,external_wp_richText_namespaceObject.registerFormatType)(name, settings));
 
 
 /***/ }),

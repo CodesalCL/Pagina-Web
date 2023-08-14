@@ -175,6 +175,11 @@ window.addEventListener('load', () => {
     submenuBlocks.forEach(function (block) {
       if (!block.contains(event.target)) {
         closeSubmenus(block);
+      } else if (event.key === 'Escape') {
+        const toggle = block.querySelector('[aria-expanded="true"]');
+        closeSubmenus(block); // Focus the submenu trigger so focus does not get trapped in the closed submenu.
+
+        toggle?.focus();
       }
     });
   });

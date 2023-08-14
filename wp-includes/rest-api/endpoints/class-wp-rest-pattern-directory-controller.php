@@ -80,6 +80,8 @@ class WP_REST_Pattern_Directory_Controller extends WP_REST_Controller {
 	 * Search and retrieve block patterns metadata
 	 *
 	 * @since 5.8.0
+	 * @since 6.0.0 Added 'slug' to request.
+	 * @since 6.2.0 Added 'per_page', 'page', 'offset', 'order', and 'orderby' to request.
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
 	 * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
@@ -92,37 +94,25 @@ class WP_REST_Pattern_Directory_Controller extends WP_REST_Controller {
 		 */
 		require ABSPATH . WPINC . '/version.php';
 
-		$query_args = array(
-			'locale'     => get_user_locale(),
-			'wp-version' => $wp_version,
+		$valid_query_args = array(
+			'offset'   => true,
+			'order'    => true,
+			'orderby'  => true,
+			'page'     => true,
+			'per_page' => true,
+			'search'   => true,
+			'slug'     => true,
 		);
+		$query_args       = array_intersect_key( $request->get_params(), $valid_query_args );
 
-		$category_id = $request['category'];
-		$keyword_id  = $request['keyword'];
-		$search_term = $request['search'];
+		$query_args['locale']             = get_user_locale();
+		$query_args['wp-version']         = $wp_version; // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UndefinedVariable -- it's defined in `version.php` above.
+		$query_args['pattern-categories'] = isset( $request['category'] ) ? $request['category'] : false;
+		$query_args['pattern-keywords']   = isset( $request['keyword'] ) ? $request['keyword'] : false;
 
-		if ( $category_id ) {
-			$query_args['pattern-categories'] = $category_id;
-		}
+		$query_args = array_filter( $query_args );
 
-		if ( $keyword_id ) {
-			$query_args['pattern-keywords'] = $keyword_id;
-		}
-
-		if ( $search_term ) {
-			$query_args['search'] = $search_term;
-		}
-
-		/*
-		 * Include a hash of the query args, so that different requests are stored in
-		 * separate caches.
-		 *
-		 * MD5 is chosen for its speed, low-collision rate, universal availability, and to stay
-		 * under the character limit for `_site_transient_timeout_{...}` keys.
-		 *
-		 * @link https://stackoverflow.com/questions/3665247/fastest-hash-for-non-cryptographic-uses
-		 */
-		$transient_key = 'wp_remote_block_patterns_' . md5( implode( '-', $query_args ) );
+		$transient_key = $this->get_transient_key( $query_args );
 
 		/*
 		 * Use network-wide transient to improve performance. The locale is the only site
@@ -216,6 +206,7 @@ class WP_REST_Pattern_Directory_Controller extends WP_REST_Controller {
 			'keywords'       => array_map( 'sanitize_title', $raw_pattern->keyword_slugs ),
 			'description'    => sanitize_text_field( $raw_pattern->meta->wpop_description ),
 			'viewport_width' => absint( $raw_pattern->meta->wpop_viewport_width ),
+			'block_types'    => array_map( 'sanitize_text_field', $raw_pattern->meta->wpop_block_types ),
 		);
 
 		$prepared_pattern = $this->add_additional_fields_to_object( $prepared_pattern, $request );
@@ -238,6 +229,7 @@ class WP_REST_Pattern_Directory_Controller extends WP_REST_Controller {
 	 * Retrieves the block pattern's schema, conforming to JSON Schema.
 	 *
 	 * @since 5.8.0
+	 * @since 6.2.0 Added `'block_types'` to schema.
 	 *
 	 * @return array Item schema data.
 	 */
@@ -300,6 +292,14 @@ class WP_REST_Pattern_Directory_Controller extends WP_REST_Controller {
 					'type'        => 'integer',
 					'context'     => array( 'view', 'embed' ),
 				),
+
+				'block_types'    => array(
+					'description' => __( 'The block types which can use this pattern.' ),
+					'type'        => 'array',
+					'uniqueItems' => true,
+					'items'       => array( 'type' => 'string' ),
+					'context'     => array( 'view', 'embed' ),
+				),
 			),
 		);
 
@@ -310,16 +310,14 @@ class WP_REST_Pattern_Directory_Controller extends WP_REST_Controller {
 	 * Retrieves the search parameters for the block pattern's collection.
 	 *
 	 * @since 5.8.0
+	 * @since 6.2.0 Added 'per_page', 'page', 'offset', 'order', and 'orderby' to request.
 	 *
 	 * @return array Collection parameters.
 	 */
 	public function get_collection_params() {
 		$query_params = parent::get_collection_params();
 
-		// Pagination is not supported.
-		unset( $query_params['page'] );
-		unset( $query_params['per_page'] );
-
+		$query_params['per_page']['default'] = 100;
 		$query_params['search']['minLength'] = 1;
 		$query_params['context']['default']  = 'view';
 
@@ -333,6 +331,42 @@ class WP_REST_Pattern_Directory_Controller extends WP_REST_Controller {
 			'description' => __( 'Limit results to those matching a keyword ID.' ),
 			'type'        => 'integer',
 			'minimum'     => 1,
+		);
+
+		$query_params['slug'] = array(
+			'description' => __( 'Limit results to those matching a pattern (slug).' ),
+			'type'        => 'array',
+		);
+
+		$query_params['offset'] = array(
+			'description' => __( 'Offset the result set by a specific number of items.' ),
+			'type'        => 'integer',
+		);
+
+		$query_params['order'] = array(
+			'description' => __( 'Order sort attribute ascending or descending.' ),
+			'type'        => 'string',
+			'default'     => 'desc',
+			'enum'        => array( 'asc', 'desc' ),
+		);
+
+		$query_params['orderby'] = array(
+			'description' => __( 'Sort collection by post attribute.' ),
+			'type'        => 'string',
+			'default'     => 'date',
+			'enum'        => array(
+				'author',
+				'date',
+				'id',
+				'include',
+				'modified',
+				'parent',
+				'relevance',
+				'slug',
+				'include_slugs',
+				'title',
+				'favorite_count',
+			),
 		);
 
 		/**

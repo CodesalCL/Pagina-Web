@@ -1,5 +1,6 @@
 {
-	"apiVersion": 2,
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
 	"name": "core/heading",
 	"title": "Heading",
 	"category": "text",
@@ -28,12 +29,17 @@
 	"supports": {
 		"align": [ "wide", "full" ],
 		"anchor": true,
-		"className": false,
+		"className": true,
 		"color": {
 			"link": true
 		},
 		"spacing": {
-			"margin": true
+			"margin": true,
+			"padding": true,
+			"__experimentalDefaultControls": {
+				"margin": false,
+				"padding": false
+			}
 		},
 		"typography": {
 			"fontSize": true,
@@ -48,7 +54,6 @@
 				"textTransform": true
 			}
 		},
-		"__experimentalSelector": "h1,h2,h3,h4,h5,h6",
 		"__unstablePasteTextInline": true,
 		"__experimentalSlashInserter": true
 	},

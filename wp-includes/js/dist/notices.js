@@ -107,12 +107,16 @@ __webpack_require__.d(__webpack_exports__, "store", function() { return /* reexp
 // NAMESPACE OBJECT: ./node_modules/@wordpress/notices/build-module/store/actions.js
 var actions_namespaceObject = {};
 __webpack_require__.r(actions_namespaceObject);
-__webpack_require__.d(actions_namespaceObject, "createNotice", function() { return createNotice; });
-__webpack_require__.d(actions_namespaceObject, "createSuccessNotice", function() { return createSuccessNotice; });
-__webpack_require__.d(actions_namespaceObject, "createInfoNotice", function() { return createInfoNotice; });
-__webpack_require__.d(actions_namespaceObject, "createErrorNotice", function() { return createErrorNotice; });
-__webpack_require__.d(actions_namespaceObject, "createWarningNotice", function() { return createWarningNotice; });
-__webpack_require__.d(actions_namespaceObject, "removeNotice", function() { return removeNotice; });
+__webpack_require__.d(actions_namespaceObject, {
+  "createErrorNotice": function() { return createErrorNotice; },
+  "createInfoNotice": function() { return createInfoNotice; },
+  "createNotice": function() { return createNotice; },
+  "createSuccessNotice": function() { return createSuccessNotice; },
+  "createWarningNotice": function() { return createWarningNotice; },
+  "removeAllNotices": function() { return removeAllNotices; },
+  "removeNotice": function() { return removeNotice; },
+  "removeNotices": function() { return removeNotices; }
+});
 
 // NAMESPACE OBJECT: ./node_modules/@wordpress/notices/build-module/store/selectors.js
 var selectors_namespaceObject = {};
@@ -134,9 +138,7 @@ var external_lodash_ = __webpack_require__("YLtl");
  *
  * @return {Function} Higher-order reducer.
  */
-const onSubKey = actionProperty => reducer => function () {
-  let state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  let action = arguments.length > 1 ? arguments[1] : undefined;
+const onSubKey = actionProperty => reducer => (state = {}, action) => {
   // Retrieve subkey from action. Do not track if undefined; useful for cases
   // where reducer is scoped by action shape.
   const key = action[actionProperty];
@@ -179,21 +181,28 @@ const onSubKey = actionProperty => reducer => function () {
  * @return {Object} Updated state.
  */
 
-const notices = on_sub_key('context')(function () {
-  let state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-  let action = arguments.length > 1 ? arguments[1] : undefined;
-
+const notices = on_sub_key('context')((state = [], action) => {
   switch (action.type) {
     case 'CREATE_NOTICE':
       // Avoid duplicates on ID.
-      return [...Object(external_lodash_["reject"])(state, {
-        id: action.notice.id
-      }), action.notice];
+      return [...state.filter(({
+        id
+      }) => id !== action.notice.id), action.notice];
 
     case 'REMOVE_NOTICE':
-      return Object(external_lodash_["reject"])(state, {
-        id: action.id
-      });
+      return state.filter(({
+        id
+      }) => id !== action.id);
+
+    case 'REMOVE_NOTICES':
+      return state.filter(({
+        id
+      }) => !action.ids.includes(id));
+
+    case 'REMOVE_ALL_NOTICES':
+      return state.filter(({
+        type
+      }) => type !== action.noticeType);
   }
 
   return state;
@@ -241,7 +250,7 @@ const DEFAULT_STATUS = 'info';
 /**
  * Returns an action object used in signalling that a notice is to be created.
  *
- * @param {string}                [status='info']              Notice status.
+ * @param {string|undefined}      status                       Notice status ("info" if undefined is passed).
  * @param {string}                content                      Notice message.
  * @param {Object}                [options]                    Notice options.
  * @param {string}                [options.context='global']   Context under which to
@@ -269,10 +278,7 @@ const DEFAULT_STATUS = 'info';
  * @return {Object} Action object.
  */
 
-function createNotice() {
-  let status = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : DEFAULT_STATUS;
-  let content = arguments.length > 1 ? arguments[1] : undefined;
-  let options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+function createNotice(status = DEFAULT_STATUS, content, options = {}) {
   const {
     speak = true,
     isDismissible = true,
@@ -377,11 +383,110 @@ function createWarningNotice(content, options) {
  * @return {Object} Action object.
  */
 
-function removeNotice(id) {
-  let context = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : DEFAULT_CONTEXT;
+function removeNotice(id, context = DEFAULT_CONTEXT) {
   return {
     type: 'REMOVE_NOTICE',
     id,
+    context
+  };
+}
+/**
+ * Removes all notices from a given context. Defaults to the default context.
+ *
+ * @param {string} noticeType The context to remove all notices from.
+ * @param {string} context    The context to remove all notices from.
+ *
+ * @example
+ * ```js
+ * import { __ } from '@wordpress/i18n';
+ * import { useDispatch, useSelect } from '@wordpress/data';
+ * import { store as noticesStore } from '@wordpress/notices';
+ * import { Button } from '@wordpress/components';
+ *
+ * export const ExampleComponent = () => {
+ * 	const notices = useSelect( ( select ) =>
+ * 		select( noticesStore ).getNotices()
+ * 	);
+ * 	const { removeNotices } = useDispatch( noticesStore );
+ * 	return (
+ * 		<>
+ * 			<ul>
+ * 				{ notices.map( ( notice ) => (
+ * 					<li key={ notice.id }>{ notice.content }</li>
+ * 				) ) }
+ * 			</ul>
+ * 			<Button
+ * 				onClick={ () =>
+ * 					removeAllNotices()
+ * 				}
+ * 			>
+ * 				{ __( 'Clear all notices', 'woo-gutenberg-products-block' ) }
+ * 			</Button>
+ * 			<Button
+ * 				onClick={ () =>
+ * 					removeAllNotices( 'snackbar' )
+ * 				}
+ * 			>
+ * 				{ __( 'Clear all snackbar notices', 'woo-gutenberg-products-block' ) }
+ * 			</Button>
+ * 		</>
+ * 	);
+ * };
+ * ```
+ *
+ * @return {Object} 	   Action object.
+ */
+
+function removeAllNotices(noticeType = 'default', context = DEFAULT_CONTEXT) {
+  return {
+    type: 'REMOVE_ALL_NOTICES',
+    noticeType,
+    context
+  };
+}
+/**
+ * Returns an action object used in signalling that several notices are to be removed.
+ *
+ * @param {string[]} ids                List of unique notice identifiers.
+ * @param {string}   [context='global'] Optional context (grouping) in which the notices are
+ *                                      intended to appear. Defaults to default context.
+ * @example
+ * ```js
+ * import { __ } from '@wordpress/i18n';
+ * import { useDispatch, useSelect } from '@wordpress/data';
+ * import { store as noticesStore } from '@wordpress/notices';
+ * import { Button } from '@wordpress/components';
+ *
+ * const ExampleComponent = () => {
+ * 	const notices = useSelect( ( select ) =>
+ * 		select( noticesStore ).getNotices()
+ * 	);
+ * 	const { removeNotices } = useDispatch( noticesStore );
+ * 	return (
+ * 		<>
+ * 			<ul>
+ * 				{ notices.map( ( notice ) => (
+ * 					<li key={ notice.id }>{ notice.content }</li>
+ * 				) ) }
+ * 			</ul>
+ * 			<Button
+ * 				onClick={ () =>
+ * 					removeNotices( notices.map( ( { id } ) => id ) )
+ * 				}
+ * 			>
+ * 				{ __( 'Clear all notices' ) }
+ * 			</Button>
+ * 		</>
+ * 	);
+ * };
+ * ```
+ * @return {Object} Action object.
+ */
+
+function removeNotices(ids, context = DEFAULT_CONTEXT) {
+  return {
+    type: 'REMOVE_NOTICES',
+    ids,
     context
   };
 }
@@ -440,8 +545,7 @@ const DEFAULT_NOTICES = [];
  * @return {WPNotice[]} Array of notices.
  */
 
-function getNotices(state) {
-  let context = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : DEFAULT_CONTEXT;
+function getNotices(state, context = DEFAULT_CONTEXT) {
   return state[context] || DEFAULT_NOTICES;
 }
 
@@ -461,8 +565,6 @@ function getNotices(state) {
  * Store definition for the notices namespace.
  *
  * @see https://github.com/WordPress/gutenberg/blob/HEAD/packages/data/README.md#createReduxStore
- *
- * @type {Object}
  */
 
 const store = Object(external_wp_data_["createReduxStore"])('core/notices', {

@@ -2020,13 +2020,54 @@ AttachmentsBrowser = View.extend(/** @lends wp.media.view.AttachmentsBrowser.pro
 	className: 'attachments-browser',
 
 	initialize: function() {
-		_.defaults( this.options, {
-			filters: false,
-			search:  true,
-			date:    true,
-			display: false,
-			sidebar: true,
-			AttachmentView: wp.media.view.Attachment.Library
+		// Render the view when a new item is added.
+		this.listenTo( this.model, 'add', this.render );
+	},
+
+	/**
+	 * @return {wp.media.view.AttachmentCompat} Returns itself to allow chaining.
+	 */
+	dispose: function() {
+		if ( this.$(':focus').length ) {
+			this.save();
+		}
+		/**
+		 * call 'dispose' directly on the parent class
+		 */
+		return View.prototype.dispose.apply( this, arguments );
+	},
+	/**
+	 * @return {wp.media.view.AttachmentCompat} Returns itself to allow chaining.
+	 */
+	render: function() {
+		var compat = this.model.get('compat');
+		if ( ! compat || ! compat.item ) {
+			return;
+		}
+
+		this.views.detach();
+		this.$el.html( compat.item );
+		this.views.render();
+		return this;
+	},
+	/**
+	 * @param {Object} event
+	 */
+	preventDefault: function( event ) {
+		event.preventDefault();
+	},
+	/**
+	 * @param {Object} event
+	 */
+	save: function( event ) {
+		var data = {};
+
+		if ( event ) {
+			event.preventDefault();
+		}
+
+		_.each( this.$el.serializeArray(), function( pair ) {
+			data[ pair.name ] = pair.value;
 		});
 
 		this.controller.on( 'toggle:upload:attachment', this.toggleUploader, this );

@@ -14,11 +14,12 @@
  * Retrieve the author of the current post.
  *
  * @since 1.5.0
+ * @since 6.3.0 Returns an empty string if the author's display name is unknown.
  *
  * @global WP_User $authordata The current author's data.
  *
  * @param string $deprecated Deprecated.
- * @return string|null The author's display name.
+ * @return string The author's display name, empty string if unknown.
  */
 function get_the_author( $deprecated = '' ) {
 	global $authordata;
@@ -32,9 +33,9 @@ function get_the_author( $deprecated = '' ) {
 	 *
 	 * @since 2.9.0
 	 *
-	 * @param string|null $display_name The author's display name.
+	 * @param string $display_name The author's display name.
 	 */
-	return apply_filters( 'the_author', is_object( $authordata ) ? $authordata->display_name : null );
+	return apply_filters( 'the_author', is_object( $authordata ) ? $authordata->display_name : '' );
 }
 
 /**
@@ -55,7 +56,7 @@ function get_the_author( $deprecated = '' ) {
  *
  * @param string $deprecated      Deprecated.
  * @param bool   $deprecated_echo Deprecated. Use get_the_author(). Echo the string or return it.
- * @return string|null The author's display name, from get_the_author().
+ * @return string The author's display name, from get_the_author().
  */
 function the_author( $deprecated = '', $deprecated_echo = true ) {
 	if ( ! empty( $deprecated ) ) {
@@ -155,7 +156,7 @@ function the_modified_author() {
  * @global WP_User $authordata The current author's data.
  *
  * @param string    $field   Optional. The user field to retrieve. Default empty.
- * @param int|false $user_id Optional. User ID.
+ * @param int|false $user_id Optional. User ID. Defaults to the current post author.
  * @return string The author's field from the current author's DB object, otherwise an empty string.
  */
 function get_the_author_meta( $field = '', $user_id = false ) {
@@ -196,7 +197,7 @@ function get_the_author_meta( $field = '', $user_id = false ) {
  *
  * @param string    $field   Selects the field of the users record. See get_the_author_meta()
  *                           for the list of possible fields.
- * @param int|false $user_id Optional. User ID.
+ * @param int|false $user_id Optional. User ID. Defaults to the current post author.
  *
  * @see get_the_author_meta()
  */
@@ -219,13 +220,15 @@ function the_author_meta( $field = '', $user_id = false ) {
 /**
  * Retrieve either author's link or author's name.
  *
- * If the author has a home page set, return an HTML link, otherwise just return the
- * author's name.
+ * If the author has a home page set, return an HTML link, otherwise just return
+ * the author's name.
  *
  * @since 3.0.0
  *
- * @return string|null An HTML link if the author's url exist in user meta,
- *                     else the result of get_the_author().
+ * @global WP_User $authordata The current author's data.
+ *
+ * @return string An HTML link if the author's URL exists in user meta,
+ *                otherwise the result of get_the_author().
  */
 function get_the_author_link() {
 	if ( get_the_author_meta( 'url' ) ) {
@@ -289,10 +292,11 @@ function the_author_posts() {
  *
  * @global WP_User $authordata The current author's data.
  *
- * @return string An HTML link to the author page, or an empty string if $authordata isn't defined.
+ * @return string An HTML link to the author page, or an empty string if $authordata is not set.
  */
 function get_the_author_posts_link() {
 	global $authordata;
+
 	if ( ! is_object( $authordata ) ) {
 		return '';
 	}
@@ -439,9 +443,41 @@ function wp_list_authors( $args = '' ) {
 	$query_args['fields'] = 'ids';
 	$authors              = get_users( $query_args );
 
-	$author_count = array();
-	foreach ( (array) $wpdb->get_results( "SELECT DISTINCT post_author, COUNT(ID) AS count FROM $wpdb->posts WHERE " . get_private_posts_cap_sql( 'post' ) . ' GROUP BY post_author' ) as $row ) {
-		$author_count[ $row->post_author ] = $row->count;
+	/**
+	 * Filters the query arguments for the list of all authors of the site.
+	 *
+	 * @since 6.1.0
+	 *
+	 * @param array $query_args  The query arguments for get_users().
+	 * @param array $parsed_args The arguments passed to wp_list_authors() combined with the defaults.
+	 */
+	$query_args = apply_filters( 'wp_list_authors_args', $query_args, $parsed_args );
+
+	$authors     = get_users( $query_args );
+	$post_counts = array();
+
+	/**
+	 * Filters whether to short-circuit performing the query for author post counts.
+	 *
+	 * @since 6.1.0
+	 *
+	 * @param int[]|false $post_counts Array of post counts, keyed by author ID.
+	 * @param array       $parsed_args The arguments passed to wp_list_authors() combined with the defaults.
+	 */
+	$post_counts = apply_filters( 'pre_wp_list_authors_post_counts_query', false, $parsed_args );
+
+	if ( ! is_array( $post_counts ) ) {
+		$post_counts       = array();
+		$post_counts_query = $wpdb->get_results(
+			"SELECT DISTINCT post_author, COUNT(ID) AS count
+			FROM $wpdb->posts
+			WHERE " . get_private_posts_cap_sql( 'post' ) . '
+			GROUP BY post_author'
+		);
+
+		foreach ( (array) $post_counts_query as $row ) {
+			$post_counts[ $row->post_author ] = $row->count;
+		}
 	}
 	foreach ( $authors as $author_id ) {
 		$posts = isset( $author_count[ $author_id ] ) ? $author_count[ $author_id ] : 0;

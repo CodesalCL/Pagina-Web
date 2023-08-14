@@ -1,5 +1,6 @@
 {
-	"apiVersion": 2,
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
 	"name": "core/site-title",
 	"title": "Site Title",
 	"category": "theme",
@@ -34,7 +35,11 @@
 		},
 		"spacing": {
 			"padding": true,
-			"margin": true
+			"margin": true,
+			"__experimentalDefaultControls": {
+				"margin": false,
+				"padding": false
+			}
 		},
 		"typography": {
 			"fontSize": true,
@@ -53,5 +58,6 @@
 			}
 		}
 	},
-	"editorStyle": "wp-block-site-title-editor"
+	"editorStyle": "wp-block-site-title-editor",
+	"style": "wp-block-site-title"
 }

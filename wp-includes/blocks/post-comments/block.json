@@ -1,7 +1,8 @@
 {
-	"apiVersion": 2,
-	"name": "core/post-comments",
-	"title": "Post Comments",
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "core/post-comments-form",
+	"title": "Post Comments Form",
 	"category": "theme",
 	"description": "Display a post's comments.",
 	"textdomain": "default",
@@ -13,7 +14,18 @@
 	"usesContext": [ "postId", "postType" ],
 	"supports": {
 		"html": false,
-		"align": [ "wide", "full" ],
+		"color": {
+			"gradients": true,
+			"link": true,
+			"__experimentalDefaultControls": {
+				"background": true,
+				"text": true
+			}
+		},
+		"spacing": {
+			"margin": true,
+			"padding": true
+		},
 		"typography": {
 			"fontSize": true,
 			"lineHeight": true,

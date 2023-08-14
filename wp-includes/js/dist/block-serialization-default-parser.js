@@ -98,6 +98,36 @@ let offset;
 let output;
 let stack;
 /**
+ * @typedef {Object|null} Attributes
+ */
+
+/**
+ * @typedef {Object} ParsedBlock
+ * @property {string|null}        blockName    Block name.
+ * @property {Attributes}         attrs        Block attributes.
+ * @property {ParsedBlock[]}      innerBlocks  Inner blocks.
+ * @property {string}             innerHTML    Inner HTML.
+ * @property {Array<string|null>} innerContent Inner content.
+ */
+
+/**
+ * @typedef {Object} ParsedFrame
+ * @property {ParsedBlock} block            Block.
+ * @property {number}      tokenStart       Token start.
+ * @property {number}      tokenLength      Token length.
+ * @property {number}      prevOffset       Previous offset.
+ * @property {number|null} leadingHtmlStart Leading HTML start.
+ */
+
+/**
+ * @typedef {'no-more-tokens'|'void-block'|'block-opener'|'block-closer'} TokenType
+ */
+
+/**
+ * @typedef {[TokenType, string, Attributes, number, number]} Token
+ */
+
+/**
  * Matches block comment delimiters
  *
  * While most of this pattern is straightforward the attribute parsing
@@ -258,14 +288,13 @@ const parse = doc => {
 
 function proceed() {
   const next = nextToken();
-  const [tokenType, blockName, attrs, startOffset, tokenLength] = next;
-  const stackDepth = stack.length; // we may have some HTML soup before the next block
+  const [tokenType, blockName, attrs, startOffset, tokenLength] = next; // We may have some HTML soup before the next block.
 
   const leadingHtmlStart = startOffset > offset ? offset : null;
 
   switch (tokenType) {
     case 'no-more-tokens':
-      // if not in a block then flush output
+      // If not in a block then flush output.
       if (0 === stackDepth) {
         addFreeform();
         return false;
@@ -274,15 +303,15 @@ function proceed() {
       // we have options
       //  - treat it all as freeform text
       //  - assume an implicit closer (easiest when not nesting)
-      // for the easy case we'll assume an implicit closer
+      // For the easy case we'll assume an implicit closer.
 
 
       if (1 === stackDepth) {
         addBlockFromStack();
         return false;
-      } // for the nested case where it's more difficult we'll
+      } // For the nested case where it's more difficult we'll
       // have to assume that multiple closers are missing
-      // and so we'll collapse the whole stack piecewise
+      // and so we'll collapse the whole stack piecewise.
 
 
       while (0 < stack.length) {
@@ -370,6 +399,12 @@ function parseJSON(input) {
     return null;
   }
 }
+/**
+ * Finds the next token in the document.
+ *
+ * @return {Token} The next matched token.
+ */
+
 
 function nextToken() {
   // aye the magic
@@ -381,7 +416,7 @@ function nextToken() {
   const matches = tokenizer.exec(document); // we have no more tokens
 
   if (null === matches) {
-    return ['no-more-tokens'];
+    return ['no-more-tokens', '', null, 0, 0];
   }
 
   const startedAt = matches.index;

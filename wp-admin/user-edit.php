@@ -9,6 +9,9 @@
 /** WordPress Administration Bootstrap */
 require_once __DIR__ . '/admin.php';
 
+/** WordPress Translation Installation API */
+require_once ABSPATH . 'wp-admin/includes/translation-install.php';
+
 wp_reset_vars( array( 'action', 'user_id', 'wp_http_referer' ) );
 
 $user_id      = (int) $user_id;
@@ -70,8 +73,8 @@ get_current_screen()->add_help_tab(
 
 get_current_screen()->set_help_sidebar(
 	'<p><strong>' . __( 'For more information:' ) . '</strong></p>' .
-	'<p>' . __( '<a href="https://wordpress.org/support/article/users-your-profile-screen/">Documentation on User Profiles</a>' ) . '</p>' .
-	'<p>' . __( '<a href="https://wordpress.org/support/">Support</a>' ) . '</p>'
+	'<p>' . __( '<a href="https://wordpress.org/documentation/article/users-your-profile-screen/">Documentation on User Profiles</a>' ) . '</p>' .
+	'<p>' . __( '<a href="https://wordpress.org/support/forums/">Support forums</a>' ) . '</p>'
 );
 
 $wp_http_referer = remove_query_arg( array( 'update', 'delete_count', 'user_id' ), $wp_http_referer );
@@ -103,7 +106,7 @@ if ( is_multisite()
 if ( IS_PROFILE_PAGE && isset( $_GET['newuseremail'] ) && $current_user->ID ) {
 	$new_email = get_user_meta( $current_user->ID, '_new_email', true );
 	if ( $new_email && hash_equals( $new_email['hash'], $_GET['newuseremail'] ) ) {
-		$user             = new stdClass;
+		$user             = new stdClass();
 		$user->ID         = $current_user->ID;
 		$user->user_email = esc_html( trim( $new_email['newemail'] ) );
 		if ( is_multisite() && $wpdb->get_var( $wpdb->prepare( "SELECT user_login FROM {$wpdb->signups} WHERE user_login = %s", $current_user->user_login ) ) ) {
@@ -197,16 +200,16 @@ switch ( $action ) {
 	<div class="notice notice-info"><p><strong><?php _e( 'Important:' ); ?></strong> <?php _e( 'This user has super admin privileges.' ); ?></p></div>
 <?php } ?>
 		<?php if ( isset( $_GET['updated'] ) ) : ?>
-<div id="message" class="updated notice is-dismissible">
-			<?php if ( IS_PROFILE_PAGE ) : ?>
-	<p><strong><?php _e( 'Profile updated.' ); ?></strong></p>
-	<?php else : ?>
-	<p><strong><?php _e( 'User updated.' ); ?></strong></p>
-	<?php endif; ?>
-			<?php if ( $wp_http_referer && false === strpos( $wp_http_referer, 'user-new.php' ) && ! IS_PROFILE_PAGE ) : ?>
-	<p><a href="<?php echo esc_url( wp_validate_redirect( esc_url_raw( $wp_http_referer ), self_admin_url( 'users.php' ) ) ); ?>"><?php _e( '&larr; Go to Users' ); ?></a></p>
-	<?php endif; ?>
-</div>
+			<div id="message" class="updated notice is-dismissible">
+				<?php if ( IS_PROFILE_PAGE ) : ?>
+					<p><strong><?php _e( 'Profile updated.' ); ?></strong></p>
+				<?php else : ?>
+					<p><strong><?php _e( 'User updated.' ); ?></strong></p>
+				<?php endif; ?>
+				<?php if ( $wp_http_referer && ! str_contains( $wp_http_referer, 'user-new.php' ) && ! IS_PROFILE_PAGE ) : ?>
+					<p><a href="<?php echo esc_url( wp_validate_redirect( sanitize_url( $wp_http_referer ), self_admin_url( 'users.php' ) ) ); ?>"><?php _e( '&larr; Go to Users' ); ?></a></p>
+				<?php endif; ?>
+			</div>
 		<?php endif; ?>
 		<?php if ( isset( $_GET['error'] ) ) : ?>
 <div class="notice notice-error">
@@ -762,14 +765,96 @@ endif;
 				}
 			}
 
-			if ( ! wp_is_site_protected_by_basic_auth( 'front' ) ) {
-				?>
-			<div class="create-application-password form-wrap">
-				<div class="form-field">
-					<label for="new_application_password_name"><?php _e( 'New Application Password Name' ); ?></label>
-					<input type="text" size="30" id="new_application_password_name" name="new_application_password_name" class="input" aria-required="true" aria-describedby="new_application_password_name_desc" />
-					<p class="description" id="new_application_password_name_desc"><?php _e( 'Required to create an Application Password, but not to update the user.' ); ?></p>
-				</div>
+					<?php if ( $show_syntax_highlighting_preference ) : ?>
+					<tr class="user-syntax-highlighting-wrap">
+						<th scope="row"><?php _e( 'Syntax Highlighting' ); ?></th>
+						<td>
+							<label for="syntax_highlighting"><input name="syntax_highlighting" type="checkbox" id="syntax_highlighting" value="false" <?php checked( 'false', $profile_user->syntax_highlighting ); ?> />
+								<?php _e( 'Disable syntax highlighting when editing code' ); ?>
+							</label>
+						</td>
+					</tr>
+					<?php endif; ?>
+
+					<?php if ( count( $_wp_admin_css_colors ) > 1 && has_action( 'admin_color_scheme_picker' ) ) : ?>
+					<tr class="user-admin-color-wrap">
+						<th scope="row"><?php _e( 'Admin Color Scheme' ); ?></th>
+						<td>
+							<?php
+							/**
+							 * Fires in the 'Admin Color Scheme' section of the user editing screen.
+							 *
+							 * The section is only enabled if a callback is hooked to the action,
+							 * and if there is more than one defined color scheme for the admin.
+							 *
+							 * @since 3.0.0
+							 * @since 3.8.1 Added `$user_id` parameter.
+							 *
+							 * @param int $user_id The user ID.
+							 */
+							do_action( 'admin_color_scheme_picker', $user_id );
+							?>
+						</td>
+					</tr>
+					<?php endif; // End if count ( $_wp_admin_css_colors ) > 1 ?>
+
+					<?php if ( ! ( IS_PROFILE_PAGE && ! $user_can_edit ) ) : ?>
+					<tr class="user-comment-shortcuts-wrap">
+						<th scope="row"><?php _e( 'Keyboard Shortcuts' ); ?></th>
+						<td>
+							<label for="comment_shortcuts">
+								<input type="checkbox" name="comment_shortcuts" id="comment_shortcuts" value="true" <?php checked( 'true', $profile_user->comment_shortcuts ); ?> />
+								<?php _e( 'Enable keyboard shortcuts for comment moderation.' ); ?>
+							</label>
+							<?php _e( '<a href="https://wordpress.org/documentation/article/keyboard-shortcuts-classic-editor/#keyboard-shortcuts-for-comments">Documentation on Keyboard Shortcuts</a>' ); ?>
+						</td>
+					</tr>
+					<?php endif; ?>
+
+					<tr class="show-admin-bar user-admin-bar-front-wrap">
+						<th scope="row"><?php _e( 'Toolbar' ); ?></th>
+						<td>
+							<label for="admin_bar_front">
+								<input name="admin_bar_front" type="checkbox" id="admin_bar_front" value="1"<?php checked( _get_admin_bar_pref( 'front', $profile_user->ID ) ); ?> />
+								<?php _e( 'Show Toolbar when viewing site' ); ?>
+							</label><br />
+						</td>
+					</tr>
+
+					<?php
+					$languages                = get_available_languages();
+					$can_install_translations = current_user_can( 'install_languages' ) && wp_can_install_language_pack();
+					?>
+					<?php if ( $languages || $can_install_translations ) : ?>
+					<tr class="user-language-wrap">
+						<th scope="row">
+							<?php /* translators: The user language selection field label. */ ?>
+							<label for="locale"><?php _e( 'Language' ); ?><span class="dashicons dashicons-translation" aria-hidden="true"></span></label>
+						</th>
+						<td>
+							<?php
+								$user_locale = $profile_user->locale;
+
+							if ( 'en_US' === $user_locale ) {
+								$user_locale = '';
+							} elseif ( '' === $user_locale || ! in_array( $user_locale, $languages, true ) ) {
+								$user_locale = 'site-default';
+							}
+
+							wp_dropdown_languages(
+								array(
+									'name'      => 'locale',
+									'id'        => 'locale',
+									'selected'  => $user_locale,
+									'languages' => $languages,
+									'show_available_translations' => $can_install_translations,
+									'show_option_site_default' => true,
+								)
+							);
+							?>
+						</td>
+					</tr>
+					<?php endif; ?>
 
 				<?php
 				/**
@@ -812,29 +897,425 @@ endif;
 	</div>
 <?php endif; // phpcs:enable Generic.WhiteSpace.ScopeIndent ?>
 
-		<?php
-		if ( IS_PROFILE_PAGE ) {
-			/**
-			 * Fires after the 'About Yourself' settings table on the 'Profile' editing screen.
-			 *
-			 * The action only fires if the current user is editing their own profile.
-			 *
-			 * @since 2.0.0
-			 *
-			 * @param WP_User $profileuser The current WP_User object.
-			 */
-			do_action( 'show_user_profile', $profileuser );
-		} else {
-			/**
-			 * Fires after the 'About the User' settings table on the 'Edit User' screen.
-			 *
-			 * @since 2.0.0
-			 *
-			 * @param WP_User $profileuser The current WP_User object.
-			 */
-			do_action( 'edit_user_profile', $profileuser );
-		}
-		?>
+				<h2><?php _e( 'Name' ); ?></h2>
+
+				<table class="form-table" role="presentation">
+					<tr class="user-user-login-wrap">
+						<th><label for="user_login"><?php _e( 'Username' ); ?></label></th>
+						<td><input type="text" name="user_login" id="user_login" value="<?php echo esc_attr( $profile_user->user_login ); ?>" disabled="disabled" class="regular-text" /> <span class="description"><?php _e( 'Usernames cannot be changed.' ); ?></span></td>
+					</tr>
+
+					<?php if ( ! IS_PROFILE_PAGE && ! is_network_admin() && current_user_can( 'promote_user', $profile_user->ID ) ) : ?>
+						<tr class="user-role-wrap">
+							<th><label for="role"><?php _e( 'Role' ); ?></label></th>
+							<td>
+								<select name="role" id="role">
+									<?php
+									// Compare user role against currently editable roles.
+									$user_roles = array_intersect( array_values( $profile_user->roles ), array_keys( get_editable_roles() ) );
+									$user_role  = reset( $user_roles );
+
+									// Print the full list of roles with the primary one selected.
+									wp_dropdown_roles( $user_role );
+
+									// Print the 'no role' option. Make it selected if the user has no role yet.
+									if ( $user_role ) {
+										echo '<option value="">' . __( '&mdash; No role for this site &mdash;' ) . '</option>';
+									} else {
+										echo '<option value="" selected="selected">' . __( '&mdash; No role for this site &mdash;' ) . '</option>';
+									}
+									?>
+							</select>
+							</td>
+						</tr>
+					<?php endif; // End if ! IS_PROFILE_PAGE. ?>
+
+					<?php if ( is_multisite() && is_network_admin() && ! IS_PROFILE_PAGE && current_user_can( 'manage_network_options' ) && ! isset( $super_admins ) ) : ?>
+						<tr class="user-super-admin-wrap">
+							<th><?php _e( 'Super Admin' ); ?></th>
+							<td>
+								<?php if ( 0 !== strcasecmp( $profile_user->user_email, get_site_option( 'admin_email' ) ) || ! is_super_admin( $profile_user->ID ) ) : ?>
+									<p><label><input type="checkbox" id="super_admin" name="super_admin"<?php checked( is_super_admin( $profile_user->ID ) ); ?> /> <?php _e( 'Grant this user super admin privileges for the Network.' ); ?></label></p>
+								<?php else : ?>
+									<p><?php _e( 'Super admin privileges cannot be removed because this user has the network admin email.' ); ?></p>
+								<?php endif; ?>
+							</td>
+						</tr>
+					<?php endif; ?>
+
+					<tr class="user-first-name-wrap">
+						<th><label for="first_name"><?php _e( 'First Name' ); ?></label></th>
+						<td><input type="text" name="first_name" id="first_name" value="<?php echo esc_attr( $profile_user->first_name ); ?>" class="regular-text" /></td>
+					</tr>
+
+					<tr class="user-last-name-wrap">
+						<th><label for="last_name"><?php _e( 'Last Name' ); ?></label></th>
+						<td><input type="text" name="last_name" id="last_name" value="<?php echo esc_attr( $profile_user->last_name ); ?>" class="regular-text" /></td>
+					</tr>
+
+					<tr class="user-nickname-wrap">
+						<th><label for="nickname"><?php _e( 'Nickname' ); ?> <span class="description"><?php _e( '(required)' ); ?></span></label></th>
+						<td><input type="text" name="nickname" id="nickname" value="<?php echo esc_attr( $profile_user->nickname ); ?>" class="regular-text" /></td>
+					</tr>
+
+					<tr class="user-display-name-wrap">
+						<th>
+							<label for="display_name"><?php _e( 'Display name publicly as' ); ?></label>
+						</th>
+						<td>
+							<select name="display_name" id="display_name">
+								<?php
+									$public_display                     = array();
+									$public_display['display_nickname'] = $profile_user->nickname;
+									$public_display['display_username'] = $profile_user->user_login;
+
+								if ( ! empty( $profile_user->first_name ) ) {
+									$public_display['display_firstname'] = $profile_user->first_name;
+								}
+
+								if ( ! empty( $profile_user->last_name ) ) {
+									$public_display['display_lastname'] = $profile_user->last_name;
+								}
+
+								if ( ! empty( $profile_user->first_name ) && ! empty( $profile_user->last_name ) ) {
+									$public_display['display_firstlast'] = $profile_user->first_name . ' ' . $profile_user->last_name;
+									$public_display['display_lastfirst'] = $profile_user->last_name . ' ' . $profile_user->first_name;
+								}
+
+								if ( ! in_array( $profile_user->display_name, $public_display, true ) ) { // Only add this if it isn't duplicated elsewhere.
+									$public_display = array( 'display_displayname' => $profile_user->display_name ) + $public_display;
+								}
+
+								$public_display = array_map( 'trim', $public_display );
+								$public_display = array_unique( $public_display );
+
+								?>
+								<?php foreach ( $public_display as $id => $item ) : ?>
+									<option <?php selected( $profile_user->display_name, $item ); ?>><?php echo $item; ?></option>
+								<?php endforeach; ?>
+							</select>
+						</td>
+					</tr>
+				</table>
+
+				<h2><?php _e( 'Contact Info' ); ?></h2>
+
+				<table class="form-table" role="presentation">
+					<tr class="user-email-wrap">
+						<th><label for="email"><?php _e( 'Email' ); ?> <span class="description"><?php _e( '(required)' ); ?></span></label></th>
+						<td>
+							<input type="email" name="email" id="email" aria-describedby="email-description" value="<?php echo esc_attr( $profile_user->user_email ); ?>" class="regular-text ltr" />
+							<?php if ( $profile_user->ID === $current_user->ID ) : ?>
+								<p class="description" id="email-description">
+									<?php _e( 'If you change this, an email will be sent at your new address to confirm it. <strong>The new address will not become active until confirmed.</strong>' ); ?>
+								</p>
+							<?php endif; ?>
+
+							<?php $new_email = get_user_meta( $current_user->ID, '_new_email', true ); ?>
+							<?php if ( $new_email && $new_email['newemail'] !== $current_user->user_email && $profile_user->ID === $current_user->ID ) : ?>
+							<div class="updated inline">
+								<p>
+									<?php
+									printf(
+										/* translators: %s: New email. */
+										__( 'There is a pending change of your email to %s.' ),
+										'<code>' . esc_html( $new_email['newemail'] ) . '</code>'
+									);
+									printf(
+										' <a href="%1$s">%2$s</a>',
+										esc_url( wp_nonce_url( self_admin_url( 'profile.php?dismiss=' . $current_user->ID . '_new_email' ), 'dismiss-' . $current_user->ID . '_new_email' ) ),
+										__( 'Cancel' )
+									);
+									?>
+								</p>
+							</div>
+							<?php endif; ?>
+						</td>
+					</tr>
+
+					<tr class="user-url-wrap">
+						<th><label for="url"><?php _e( 'Website' ); ?></label></th>
+						<td><input type="url" name="url" id="url" value="<?php echo esc_attr( $profile_user->user_url ); ?>" class="regular-text code" /></td>
+					</tr>
+
+					<?php foreach ( wp_get_user_contact_methods( $profile_user ) as $name => $desc ) : ?>
+					<tr class="user-<?php echo $name; ?>-wrap">
+						<th>
+							<label for="<?php echo $name; ?>">
+							<?php
+							/**
+							 * Filters a user contactmethod label.
+							 *
+							 * The dynamic portion of the hook name, `$name`, refers to
+							 * each of the keys in the contact methods array.
+							 *
+							 * @since 2.9.0
+							 *
+							 * @param string $desc The translatable label for the contact method.
+							 */
+							echo apply_filters( "user_{$name}_label", $desc );
+							?>
+							</label>
+						</th>
+						<td>
+							<input type="text" name="<?php echo $name; ?>" id="<?php echo $name; ?>" value="<?php echo esc_attr( $profile_user->$name ); ?>" class="regular-text" />
+						</td>
+					</tr>
+					<?php endforeach; ?>
+				</table>
+
+				<h2><?php IS_PROFILE_PAGE ? _e( 'About Yourself' ) : _e( 'About the user' ); ?></h2>
+
+				<table class="form-table" role="presentation">
+					<tr class="user-description-wrap">
+						<th><label for="description"><?php _e( 'Biographical Info' ); ?></label></th>
+						<td><textarea name="description" id="description" rows="5" cols="30"><?php echo $profile_user->description; // textarea_escaped ?></textarea>
+						<p class="description"><?php _e( 'Share a little biographical information to fill out your profile. This may be shown publicly.' ); ?></p></td>
+					</tr>
+
+					<?php if ( get_option( 'show_avatars' ) ) : ?>
+						<tr class="user-profile-picture">
+							<th><?php _e( 'Profile Picture' ); ?></th>
+							<td>
+								<?php echo get_avatar( $user_id ); ?>
+								<p class="description">
+									<?php
+									if ( IS_PROFILE_PAGE ) {
+										$description = sprintf(
+											/* translators: %s: Gravatar URL. */
+											__( '<a href="%s">You can change your profile picture on Gravatar</a>.' ),
+											__( 'https://en.gravatar.com/' )
+										);
+									} else {
+										$description = '';
+									}
+
+									/**
+									 * Filters the user profile picture description displayed under the Gravatar.
+									 *
+									 * @since 4.4.0
+									 * @since 4.7.0 Added the `$profile_user` parameter.
+									 *
+									 * @param string  $description  The description that will be printed.
+									 * @param WP_User $profile_user The current WP_User object.
+									 */
+									echo apply_filters( 'user_profile_picture_description', $description, $profile_user );
+									?>
+								</p>
+							</td>
+						</tr>
+					<?php endif; ?>
+					<?php
+					/**
+					 * Filters the display of the password fields.
+					 *
+					 * @since 1.5.1
+					 * @since 2.8.0 Added the `$profile_user` parameter.
+					 * @since 4.4.0 Now evaluated only in user-edit.php.
+					 *
+					 * @param bool    $show         Whether to show the password fields. Default true.
+					 * @param WP_User $profile_user User object for the current user to edit.
+					 */
+					$show_password_fields = apply_filters( 'show_password_fields', true, $profile_user );
+					?>
+					<?php if ( $show_password_fields ) : ?>
+						</table>
+
+						<h2><?php _e( 'Account Management' ); ?></h2>
+
+						<table class="form-table" role="presentation">
+							<tr id="password" class="user-pass1-wrap">
+								<th><label for="pass1"><?php _e( 'New Password' ); ?></label></th>
+								<td>
+									<input type="hidden" value=" " /><!-- #24364 workaround -->
+									<button type="button" class="button wp-generate-pw hide-if-no-js" aria-expanded="false"><?php _e( 'Set New Password' ); ?></button>
+									<div class="wp-pwd hide-if-js">
+										<div class="password-input-wrapper">
+											<input type="password" name="pass1" id="pass1" class="regular-text" value="" autocomplete="new-password" spellcheck="false" data-pw="<?php echo esc_attr( wp_generate_password( 24 ) ); ?>" aria-describedby="pass-strength-result" />
+											<div style="display:none" id="pass-strength-result" aria-live="polite"></div>
+										</div>
+										<button type="button" class="button wp-hide-pw hide-if-no-js" data-toggle="0" aria-label="<?php esc_attr_e( 'Hide password' ); ?>">
+											<span class="dashicons dashicons-hidden" aria-hidden="true"></span>
+											<span class="text"><?php _e( 'Hide' ); ?></span>
+										</button>
+										<button type="button" class="button wp-cancel-pw hide-if-no-js" data-toggle="0" aria-label="<?php esc_attr_e( 'Cancel password change' ); ?>">
+											<span class="dashicons dashicons-no" aria-hidden="true"></span>
+											<span class="text"><?php _e( 'Cancel' ); ?></span>
+										</button>
+									</div>
+								</td>
+							</tr>
+							<tr class="user-pass2-wrap hide-if-js">
+								<th scope="row"><label for="pass2"><?php _e( 'Repeat New Password' ); ?></label></th>
+								<td>
+								<input type="password" name="pass2" id="pass2" class="regular-text" value="" autocomplete="new-password" spellcheck="false" aria-describedby="pass2-desc" />
+									<?php if ( IS_PROFILE_PAGE ) : ?>
+										<p class="description" id="pass2-desc"><?php _e( 'Type your new password again.' ); ?></p>
+									<?php else : ?>
+										<p class="description" id="pass2-desc"><?php _e( 'Type the new password again.' ); ?></p>
+									<?php endif; ?>
+								</td>
+							</tr>
+							<tr class="pw-weak">
+								<th><?php _e( 'Confirm Password' ); ?></th>
+								<td>
+									<label>
+										<input type="checkbox" name="pw_weak" class="pw-checkbox" />
+										<span id="pw-weak-text-label"><?php _e( 'Confirm use of weak password' ); ?></span>
+									</label>
+								</td>
+							</tr>
+							<?php endif; // End Show Password Fields. ?>
+
+							<?php // Allow admins to send reset password link. ?>
+							<?php if ( ! IS_PROFILE_PAGE && true === wp_is_password_reset_allowed_for_user( $profile_user ) ) : ?>
+								<tr class="user-generate-reset-link-wrap hide-if-no-js">
+									<th><?php _e( 'Password Reset' ); ?></th>
+									<td>
+										<div class="generate-reset-link">
+											<button type="button" class="button button-secondary" id="generate-reset-link">
+												<?php _e( 'Send Reset Link' ); ?>
+											</button>
+										</div>
+										<p class="description">
+											<?php
+											printf(
+												/* translators: %s: User's display name. */
+												__( 'Send %s a link to reset their password. This will not change their password, nor will it force a change.' ),
+												esc_html( $profile_user->display_name )
+											);
+											?>
+										</p>
+									</td>
+								</tr>
+							<?php endif; ?>
+
+							<?php if ( IS_PROFILE_PAGE && count( $sessions->get_all() ) === 1 ) : ?>
+								<tr class="user-sessions-wrap hide-if-no-js">
+									<th><?php _e( 'Sessions' ); ?></th>
+									<td aria-live="assertive">
+										<div class="destroy-sessions"><button type="button" disabled class="button"><?php _e( 'Log Out Everywhere Else' ); ?></button></div>
+										<p class="description">
+											<?php _e( 'You are only logged in at this location.' ); ?>
+										</p>
+									</td>
+								</tr>
+							<?php elseif ( IS_PROFILE_PAGE && count( $sessions->get_all() ) > 1 ) : ?>
+								<tr class="user-sessions-wrap hide-if-no-js">
+									<th><?php _e( 'Sessions' ); ?></th>
+									<td aria-live="assertive">
+										<div class="destroy-sessions"><button type="button" class="button" id="destroy-sessions"><?php _e( 'Log Out Everywhere Else' ); ?></button></div>
+										<p class="description">
+											<?php _e( 'Did you lose your phone or leave your account logged in at a public computer? You can log out everywhere else, and stay logged in here.' ); ?>
+										</p>
+									</td>
+								</tr>
+							<?php elseif ( ! IS_PROFILE_PAGE && $sessions->get_all() ) : ?>
+								<tr class="user-sessions-wrap hide-if-no-js">
+									<th><?php _e( 'Sessions' ); ?></th>
+									<td>
+										<p><button type="button" class="button" id="destroy-sessions"><?php _e( 'Log Out Everywhere' ); ?></button></p>
+										<p class="description">
+											<?php
+											/* translators: %s: User's display name. */
+											printf( __( 'Log %s out of all locations.' ), $profile_user->display_name );
+											?>
+										</p>
+									</td>
+								</tr>
+							<?php endif; ?>
+						</table>
+
+					<?php if ( wp_is_application_passwords_available_for_user( $user_id ) || ! wp_is_application_passwords_supported() ) : ?>
+						<div class="application-passwords hide-if-no-js" id="application-passwords-section">
+							<h2><?php _e( 'Application Passwords' ); ?></h2>
+							<p><?php _e( 'Application passwords allow authentication via non-interactive systems, such as XML-RPC or the REST API, without providing your actual password. Application passwords can be easily revoked. They cannot be used for traditional logins to your website.' ); ?></p>
+							<?php if ( wp_is_application_passwords_available_for_user( $user_id ) ) : ?>
+								<?php
+								if ( is_multisite() ) :
+									$blogs       = get_blogs_of_user( $user_id, true );
+									$blogs_count = count( $blogs );
+
+									if ( $blogs_count > 1 ) :
+										?>
+										<p>
+											<?php
+											/* translators: 1: URL to my-sites.php, 2: Number of sites the user has. */
+											$message = _n(
+												'Application passwords grant access to <a href="%1$s">the %2$s site in this installation that you have permissions on</a>.',
+												'Application passwords grant access to <a href="%1$s">all %2$s sites in this installation that you have permissions on</a>.',
+												$blogs_count
+											);
+
+											if ( is_super_admin( $user_id ) ) {
+												/* translators: 1: URL to my-sites.php, 2: Number of sites the user has. */
+												$message = _n(
+													'Application passwords grant access to <a href="%1$s">the %2$s site on the network as you have Super Admin rights</a>.',
+													'Application passwords grant access to <a href="%1$s">all %2$s sites on the network as you have Super Admin rights</a>.',
+													$blogs_count
+												);
+											}
+
+											printf(
+												$message,
+												admin_url( 'my-sites.php' ),
+												number_format_i18n( $blogs_count )
+											);
+											?>
+										</p>
+										<?php
+									endif;
+								endif;
+								?>
+
+								<?php if ( ! wp_is_site_protected_by_basic_auth( 'front' ) ) : ?>
+									<div class="create-application-password form-wrap">
+										<div class="form-field">
+											<label for="new_application_password_name"><?php _e( 'New Application Password Name' ); ?></label>
+											<input type="text" size="30" id="new_application_password_name" name="new_application_password_name" class="input" aria-required="true" aria-describedby="new_application_password_name_desc" spellcheck="false" />
+											<p class="description" id="new_application_password_name_desc"><?php _e( 'Required to create an Application Password, but not to update the user.' ); ?></p>
+										</div>
+
+										<?php
+										/**
+										 * Fires in the create Application Passwords form.
+										 *
+										 * @since 5.6.0
+										 *
+										 * @param WP_User $profile_user The current WP_User object.
+										 */
+										do_action( 'wp_create_application_password_form', $profile_user );
+										?>
+
+										<button type="button" name="do_new_application_password" id="do_new_application_password" class="button button-secondary"><?php _e( 'Add New Application Password' ); ?></button>
+									</div>
+								<?php else : ?>
+									<div class="notice notice-error inline">
+										<p><?php _e( 'Your website appears to use Basic Authentication, which is not currently compatible with Application Passwords.' ); ?></p>
+									</div>
+								<?php endif; ?>
+
+								<div class="application-passwords-list-table-wrapper">
+									<?php
+									$application_passwords_list_table = _get_list_table( 'WP_Application_Passwords_List_Table', array( 'screen' => 'application-passwords-user' ) );
+									$application_passwords_list_table->prepare_items();
+									$application_passwords_list_table->display();
+									?>
+								</div>
+							<?php elseif ( ! wp_is_application_passwords_supported() ) : ?>
+								<p><?php _e( 'The application password feature requires HTTPS, which is not enabled on this site.' ); ?></p>
+								<p>
+									<?php
+									printf(
+										/* translators: %s: Documentation URL. */
+										__( 'If this is a development website you can <a href="%s" target="_blank">set the environment type accordingly</a> to enable application passwords.' ),
+										__( 'https://developer.wordpress.org/apis/wp-config-php/#wp-environment-type' )
+									);
+									?>
+								</p>
+							<?php endif; ?>
+						</div>
+					<?php endif; // End Application Passwords. ?>
 
 		<?php
 		/**
@@ -898,6 +1379,21 @@ endif;
 	}
 </script>
 
+<script type="text/javascript">
+	jQuery( function( $ ) {
+		var languageSelect = $( '#locale' );
+		$( 'form' ).on( 'submit', function() {
+			/*
+			 * Don't show a spinner for English and installed languages,
+			 * as there is nothing to download.
+			 */
+			if ( ! languageSelect.find( 'option:selected' ).data( 'installed' ) ) {
+				$( '#submit', this ).after( '<span class="spinner language-install-spinner is-active" />' );
+			}
+		});
+	} );
+</script>
+
 <?php if ( isset( $application_passwords_list_table ) ) : ?>
 	<script type="text/html" id="tmpl-new-application-password">
 		<div class="notice notice-success is-dismissible new-application-password-notice" role="alert" tabindex="-1">
@@ -915,7 +1411,12 @@ endif;
 			</p>
 			<p><?php _e( 'Be sure to save this in a safe location. You will not be able to retrieve it.' ); ?></p>
 			<button type="button" class="notice-dismiss">
-				<span class="screen-reader-text"><?php _e( 'Dismiss this notice.' ); ?></span>
+				<span class="screen-reader-text">
+					<?php
+					/* translators: Hidden accessibility text. */
+					_e( 'Dismiss this notice.' );
+					?>
+				</span>
 			</button>
 		</div>
 	</script>

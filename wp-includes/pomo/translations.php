@@ -119,7 +119,7 @@ if ( ! class_exists( 'Translations', false ) ) :
 		 * @param int $count number of items
 		 */
 		public function select_plural_form( $count ) {
-			return 1 == $count ? 0 : 1;
+			return 1 === (int) $count ? 0 : 1;
 		}
 
 		/**
@@ -151,7 +151,7 @@ if ( ! class_exists( 'Translations', false ) ) :
 				isset( $translated->translations[ $index ] ) ) {
 				return $translated->translations[ $index ];
 			} else {
-				return 1 == $count ? $singular : $plural;
+				return 1 === (int) $count ? $singular : $plural;
 			}
 		}
 
@@ -350,7 +350,7 @@ if ( ! class_exists( 'NOOP_Translations', false ) ) :
 		 * @return bool
 		 */
 		public function select_plural_form( $count ) {
-			return 1 == $count ? 0 : 1;
+			return 1 === (int) $count ? 0 : 1;
 		}
 
 		/**
@@ -367,7 +367,7 @@ if ( ! class_exists( 'NOOP_Translations', false ) ) :
 		 * @param string $context
 		 */
 		public function translate_plural( $singular, $plural, $count, $context = null ) {
-			return 1 == $count ? $singular : $plural;
+			return 1 === (int) $count ? $singular : $plural;
 		}
 
 		/**

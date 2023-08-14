@@ -1,5 +1,6 @@
 {
-	"apiVersion": 2,
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
 	"name": "core/media-text",
 	"title": "Media & Text",
 	"category": "media",
@@ -9,7 +10,7 @@
 	"attributes": {
 		"align": {
 			"type": "string",
-			"default": "wide"
+			"default": "none"
 		},
 		"mediaAlt": {
 			"type": "string",
@@ -83,6 +84,9 @@
 		},
 		"focalPoint": {
 			"type": "object"
+		},
+		"allowedBlocks": {
+			"type": "array"
 		}
 	},
 	"supports": {

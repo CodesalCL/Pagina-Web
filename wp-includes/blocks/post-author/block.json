@@ -1,5 +1,6 @@
 {
-	"apiVersion": 2,
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
 	"name": "core/post-author",
 	"title": "Post Author",
 	"category": "theme",
@@ -22,6 +23,14 @@
 		},
 		"byline": {
 			"type": "string"
+		},
+		"isLink": {
+			"type": "boolean",
+			"default": false
+		},
+		"linkTarget": {
+			"type": "string",
+			"default": "_self"
 		}
 	},
 	"usesContext": [ "postType", "postId", "queryId" ],
@@ -48,6 +57,5 @@
 			"__experimentalDuotone": ".wp-block-post-author__avatar img"
 		}
 	},
-	"editorStyle": "wp-block-post-author-editor",
 	"style": "wp-block-post-author"
 }

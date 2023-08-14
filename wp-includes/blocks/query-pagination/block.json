@@ -1,5 +1,6 @@
 {
-	"apiVersion": 2,
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
 	"name": "core/query-pagination",
 	"title": "Pagination",
 	"category": "design",
@@ -10,11 +11,16 @@
 		"paginationArrow": {
 			"type": "string",
 			"default": "none"
+		},
+		"showLabel": {
+			"type": "boolean",
+			"default": true
 		}
 	},
 	"usesContext": [ "queryId", "query" ],
 	"providesContext": {
-		"paginationArrow": "paginationArrow"
+		"paginationArrow": "paginationArrow",
+		"showLabel": "showLabel"
 	},
 	"supports": {
 		"align": true,
@@ -24,7 +30,7 @@
 			"gradients": true,
 			"link": true
 		},
-		"__experimentalLayout": {
+		"layout": {
 			"allowSwitching": false,
 			"allowInheriting": false,
 			"default": {

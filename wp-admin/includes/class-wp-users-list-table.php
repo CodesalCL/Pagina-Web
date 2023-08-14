@@ -59,7 +59,7 @@ class WP_Users_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * Check the current user's permissions.
+	 * Checks the current user's permissions.
 	 *
 	 * @since 3.1.0
 	 *
@@ -74,7 +74,7 @@ class WP_Users_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * Prepare the users list for display.
+	 * Prepares the users list for display.
 	 *
 	 * @since 3.1.0
 	 *
@@ -151,7 +151,7 @@ class WP_Users_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * Output 'no users' message.
+	 * Outputs 'no users' message.
 	 *
 	 * @since 3.1.0
 	 */
@@ -160,7 +160,7 @@ class WP_Users_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * Return an associative array listing all the views that can be used
+	 * Returns an associative array listing all the views that can be used
 	 * with this table.
 	 *
 	 * Provides a list of roles and user count for that role for easy
@@ -255,7 +255,7 @@ class WP_Users_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * Retrieve an associative array of bulk actions available on this table.
+	 * Retrieves an associative array of bulk actions available on this table.
 	 *
 	 * @since 3.1.0
 	 *
@@ -283,7 +283,7 @@ class WP_Users_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * Output the controls to allow user roles to be changed in bulk.
+	 * Outputs the controls to allow user roles to be changed in bulk.
 	 *
 	 * @since 3.1.0
 	 *
@@ -296,7 +296,12 @@ class WP_Users_List_Table extends WP_List_Table {
 		?>
 	<div class="alignleft actions">
 		<?php if ( current_user_can( 'promote_users' ) && $this->has_items() ) : ?>
-		<label class="screen-reader-text" for="<?php echo $id; ?>"><?php _e( 'Change role to&hellip;' ); ?></label>
+		<label class="screen-reader-text" for="<?php echo $id; ?>">
+			<?php
+			/* translators: Hidden accessibility text. */
+			_e( 'Change role to&hellip;' );
+			?>
+		</label>
 		<select name="<?php echo $id; ?>" id="<?php echo $id; ?>">
 			<option value=""><?php _e( 'Change role to&hellip;' ); ?></option>
 			<?php wp_dropdown_roles(); ?>
@@ -331,7 +336,7 @@ class WP_Users_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * Capture the bulk action required, and return it.
+	 * Captures the bulk action required, and return it.
 	 *
 	 * Overridden from the base class implementation to capture
 	 * the role change drop-down.
@@ -341,7 +346,7 @@ class WP_Users_List_Table extends WP_List_Table {
 	 * @return string The bulk action required.
 	 */
 	public function current_action() {
-		if ( isset( $_REQUEST['changeit'] ) && ! empty( $_REQUEST['new_role'] ) ) {
+		if ( isset( $_REQUEST['changeit'] ) ) {
 			return 'promote';
 		}
 
@@ -349,7 +354,7 @@ class WP_Users_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * Get a list of columns for the list table.
+	 * Gets a list of columns for the list table.
 	 *
 	 * @since 3.1.0
 	 *
@@ -373,23 +378,23 @@ class WP_Users_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * Get a list of sortable columns for the list table.
+	 * Gets a list of sortable columns for the list table.
 	 *
 	 * @since 3.1.0
 	 *
 	 * @return array Array of sortable columns.
 	 */
 	protected function get_sortable_columns() {
-		$c = array(
-			'username' => 'login',
-			'email'    => 'email',
+		$columns = array(
+			'username' => array( 'login', false, __( 'Username' ), __( 'Table ordered by Username.' ), 'asc' ),
+			'email'    => array( 'email', false, __( 'E-mail' ), __( 'Table ordered by E-mail.' ) ),
 		);
 
 		return $c;
 	}
 
 	/**
-	 * Generate the list table rows.
+	 * Generates the list table rows.
 	 *
 	 * @since 3.1.0
 	 */
@@ -405,7 +410,7 @@ class WP_Users_List_Table extends WP_List_Table {
 	}
 
 	/**
-	 * Generate HTML for a single row on the users.php admin panel.
+	 * Generates HTML for a single row on the users.php admin panel.
 	 *
 	 * @since 3.1.0
 	 * @since 4.2.0 The `$style` parameter was deprecated.
@@ -476,7 +481,10 @@ class WP_Users_List_Table extends WP_List_Table {
 			}
 
 			// Add a link to send the user a reset password link by email.
-			if ( get_current_user_id() !== $user_object->ID && current_user_can( 'edit_user', $user_object->ID ) ) {
+			if ( get_current_user_id() !== $user_object->ID
+				&& current_user_can( 'edit_user', $user_object->ID )
+				&& true === wp_is_password_reset_allowed_for_user( $user_object )
+			) {
 				$actions['resetpassword'] = "<a class='resetpassword' href='" . wp_nonce_url( "users.php?action=resetpassword&amp;users=$user_object->ID", 'bulk-users' ) . "'>" . __( 'Send password reset' ) . '</a>';
 			}
 
@@ -497,10 +505,10 @@ class WP_Users_List_Table extends WP_List_Table {
 
 			// Set up the checkbox (because the user is editable, otherwise it's empty).
 			$checkbox = sprintf(
-				'<label class="screen-reader-text" for="user_%1$s">%2$s</label>' .
+				'<label class="label-covers-full-cell" for="user_%1$s"><span class="screen-reader-text">%2$s</span></label>' .
 				'<input type="checkbox" name="users[]" id="user_%1$s" class="%3$s" value="%1$s" />',
 				$user_object->ID,
-				/* translators: %s: User login. */
+				/* translators: Hidden accessibility text. %s: User login. */
 				sprintf( __( 'Select %s' ), $user_object->user_login ),
 				$role_classes
 			);
@@ -553,6 +561,7 @@ class WP_Users_List_Table extends WP_List_Table {
 						} else {
 							$r .= sprintf(
 								'<span aria-hidden="true">&#8212;</span><span class="screen-reader-text">%s</span>',
+								/* translators: Hidden accessibility text. */
 								_x( 'Unknown', 'name' )
 							);
 						}
@@ -570,7 +579,7 @@ class WP_Users_List_Table extends WP_List_Table {
 								"edit.php?author={$user_object->ID}",
 								$numposts,
 								sprintf(
-									/* translators: %s: Number of posts. */
+									/* translators: Hidden accessibility text. %s: Number of posts. */
 									_n( '%s post by this author', '%s posts by this author', $numposts ),
 									number_format_i18n( $numposts )
 								)

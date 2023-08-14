@@ -164,11 +164,7 @@ var external_lodash_ = __webpack_require__("YLtl");
  *
  * @return {Object} Updated state.
  */
-
-function reducer() {
-  let state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  let action = arguments.length > 1 ? arguments[1] : undefined;
-
+function reducer(state = {}, action) {
   switch (action.type) {
     case 'REGISTER_SHORTCUT':
       return { ...state,
@@ -220,14 +216,13 @@ function reducer() {
  *
  * @return {Object} action.
  */
-function registerShortcut(_ref) {
-  let {
-    name,
-    category,
-    description,
-    keyCombination,
-    aliases
-  } = _ref;
+function registerShortcut({
+  name,
+  category,
+  description,
+  keyCombination,
+  aliases
+}) {
   return {
     type: 'REGISTER_SHORTCUT',
     name,
@@ -335,8 +330,7 @@ function getShortcutKeyCombination(state, name) {
  * @return {string?} Shortcut representation.
  */
 
-function getShortcutRepresentation(state, name) {
-  let representation = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'display';
+function getShortcutRepresentation(state, name, representation = 'display') {
   const shortcut = getShortcutKeyCombination(state, name);
   return getKeyCombinationRepresentation(shortcut, representation);
 }
@@ -388,14 +382,8 @@ const getAllShortcutRawKeyCombinations = Object(rememo["a" /* default */])((stat
  * @return {string[]} Shortcut names.
  */
 
-const getCategoryShortcuts = Object(rememo["a" /* default */])((state, categoryName) => {
-  return Object.entries(state).filter(_ref => {
-    let [, shortcut] = _ref;
-    return shortcut.category === categoryName;
-  }).map(_ref2 => {
-    let [name] = _ref2;
-    return name;
-  });
+const getCategoryShortcuts = rememo((state, categoryName) => {
+  return Object.entries(state).filter(([, shortcut]) => shortcut.category === categoryName).map(([name]) => name);
 }, state => [state]);
 
 // CONCATENATED MODULE: ./node_modules/@wordpress/keyboard-shortcuts/build-module/store/index.js
@@ -462,12 +450,11 @@ function useShortcutEventMatch() {
    */
 
   function isMatch(name, event) {
-    return getAllShortcutKeyCombinations(name).some(_ref => {
-      let {
-        modifier,
-        character
-      } = _ref;
-      return external_wp_keycodes_["isKeyboardEvent"][modifier](event, character);
+    return getAllShortcutKeyCombinations(name).some(({
+      modifier,
+      character
+    }) => {
+      return external_wp_keycodes_namespaceObject.isKeyboardEvent[modifier](event, character);
     });
   }
 
@@ -501,11 +488,10 @@ const context = Object(external_wp_element_["createContext"])();
  * @param {boolean}  options.isDisabled Whether to disable to shortut.
  */
 
-function useShortcut(name, callback) {
-  let {
-    isDisabled
-  } = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-  const shortcuts = Object(external_wp_element_["useContext"])(context);
+function useShortcut(name, callback, {
+  isDisabled
+} = {}) {
+  const shortcuts = (0,external_wp_element_namespaceObject.useContext)(context);
   const isMatch = useShortcutEventMatch();
   const callbackRef = Object(external_wp_element_["useRef"])();
   callbackRef.current = callback;
@@ -527,11 +513,7 @@ function useShortcut(name, callback) {
   }, [name, isDisabled]);
 }
 
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/extends.js
-var esm_extends = __webpack_require__("wx14");
-
-// CONCATENATED MODULE: ./node_modules/@wordpress/keyboard-shortcuts/build-module/components/shortcut-provider.js
-
+;// CONCATENATED MODULE: ./node_modules/@wordpress/keyboard-shortcuts/build-module/components/shortcut-provider.js
 
 
 /**
@@ -569,9 +551,9 @@ function ShortcutProvider(props) {
 
   return Object(external_wp_element_["createElement"])(Provider, {
     value: keyboardShortcuts
-  }, Object(external_wp_element_["createElement"])("div", Object(esm_extends["a" /* default */])({}, props, {
+  }, (0,external_wp_element_namespaceObject.createElement)("div", { ...props,
     onKeyDown: onKeyDown
-  })));
+  }));
   /* eslint-enable jsx-a11y/no-static-element-interactions */
 }
 

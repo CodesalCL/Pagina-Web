@@ -237,6 +237,7 @@ class WP_REST_Block_Types_Controller extends WP_REST_Controller {
 	 *
 	 * @since 5.5.0
 	 * @since 5.9.0 Renamed `$block_type` to `$item` to match parent class for PHP 8 named parameter support.
+	 * @since 6.3.0 Added `selectors` field.
 	 *
 	 * @param WP_Block_Type   $item    Block type data.
 	 * @param WP_REST_Request $request Full details about the request.
@@ -277,7 +278,33 @@ class WP_REST_Block_Types_Controller extends WP_REST_Controller {
 			'view_script',
 			'editor_style',
 			'style',
-			'variations',
+		);
+		$extra_fields      = array_merge(
+			array(
+				'api_version',
+				'name',
+				'title',
+				'description',
+				'icon',
+				'category',
+				'keywords',
+				'parent',
+				'ancestor',
+				'provides_context',
+				'uses_context',
+				'selectors',
+				'supports',
+				'styles',
+				'textdomain',
+				'example',
+				'editor_script_handles',
+				'script_handles',
+				'view_script_handles',
+				'editor_style_handles',
+				'style_handles',
+				'variations',
+			),
+			$deprecated_fields
 		);
 		foreach ( $extra_fields as $extra_field ) {
 			if ( rest_is_field_included( $extra_field, $fields ) ) {
@@ -357,6 +384,7 @@ class WP_REST_Block_Types_Controller extends WP_REST_Controller {
 	 * Retrieves the block type' schema, conforming to JSON Schema.
 	 *
 	 * @since 5.5.0
+	 * @since 6.3.0 Added `selectors` field.
 	 *
 	 * @return array Item schema data.
 	 */
@@ -496,7 +524,15 @@ class WP_REST_Block_Types_Controller extends WP_REST_Controller {
 					'context'     => array( 'embed', 'view', 'edit' ),
 					'readonly'    => true,
 				),
-				'supports'         => array(
+				'selectors'             => array(
+					'description' => __( 'Custom CSS selectors.' ),
+					'type'        => 'object',
+					'default'     => array(),
+					'properties'  => array(),
+					'context'     => array( 'embed', 'view', 'edit' ),
+					'readonly'    => true,
+				),
+				'supports'              => array(
 					'description' => __( 'Block supports.' ),
 					'type'        => 'object',
 					'default'     => array(),

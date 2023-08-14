@@ -95,19 +95,22 @@ this["wp"] = this["wp"] || {}; this["wp"]["primitives"] =
 __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
-__webpack_require__.d(__webpack_exports__, "Circle", function() { return /* reexport */ Circle; });
-__webpack_require__.d(__webpack_exports__, "G", function() { return /* reexport */ G; });
-__webpack_require__.d(__webpack_exports__, "Path", function() { return /* reexport */ Path; });
-__webpack_require__.d(__webpack_exports__, "Polygon", function() { return /* reexport */ Polygon; });
-__webpack_require__.d(__webpack_exports__, "Rect", function() { return /* reexport */ Rect; });
-__webpack_require__.d(__webpack_exports__, "Defs", function() { return /* reexport */ Defs; });
-__webpack_require__.d(__webpack_exports__, "RadialGradient", function() { return /* reexport */ RadialGradient; });
-__webpack_require__.d(__webpack_exports__, "LinearGradient", function() { return /* reexport */ LinearGradient; });
-__webpack_require__.d(__webpack_exports__, "Stop", function() { return /* reexport */ Stop; });
-__webpack_require__.d(__webpack_exports__, "SVG", function() { return /* reexport */ SVG; });
-__webpack_require__.d(__webpack_exports__, "HorizontalRule", function() { return /* reexport */ HorizontalRule; });
-__webpack_require__.d(__webpack_exports__, "BlockQuotation", function() { return /* reexport */ BlockQuotation; });
-__webpack_require__.d(__webpack_exports__, "View", function() { return /* reexport */ View; });
+__webpack_require__.d(__webpack_exports__, {
+  "BlockQuotation": function() { return /* reexport */ BlockQuotation; },
+  "Circle": function() { return /* reexport */ Circle; },
+  "Defs": function() { return /* reexport */ Defs; },
+  "G": function() { return /* reexport */ G; },
+  "HorizontalRule": function() { return /* reexport */ HorizontalRule; },
+  "Line": function() { return /* reexport */ Line; },
+  "LinearGradient": function() { return /* reexport */ LinearGradient; },
+  "Path": function() { return /* reexport */ Path; },
+  "Polygon": function() { return /* reexport */ Polygon; },
+  "RadialGradient": function() { return /* reexport */ RadialGradient; },
+  "Rect": function() { return /* reexport */ Rect; },
+  "SVG": function() { return /* reexport */ SVG; },
+  "Stop": function() { return /* reexport */ Stop; },
+  "View": function() { return /* reexport */ View; }
+});
 
 // EXTERNAL MODULE: ./node_modules/classnames/index.js
 var classnames = __webpack_require__("TSYQ");
@@ -142,6 +145,13 @@ const Circle = props => Object(external_wp_element_["createElement"])('circle', 
  */
 
 const G = props => Object(external_wp_element_["createElement"])('g', props);
+/**
+ * @param {import('react').ComponentPropsWithoutRef<'line'>} props
+ *
+ * @return {JSX.Element} Path component
+ */
+
+const Line = props => (0,external_wp_element_namespaceObject.createElement)('line', props);
 /**
  * @param {import('react').ComponentPropsWithoutRef<'path'>} props
  *
@@ -199,12 +209,11 @@ const Stop = props => Object(external_wp_element_["createElement"])('stop', prop
  * @return {JSX.Element} Stop component
  */
 
-const SVG = _ref => {
-  let {
-    className,
-    isPressed,
-    ...props
-  } = _ref;
+const SVG = ({
+  className,
+  isPressed,
+  ...props
+}) => {
   const appliedProps = { ...props,
     className: classnames_default()(className, {
       'is-pressed': isPressed
@@ -215,7 +224,8 @@ const SVG = _ref => {
   }; // Disable reason: We need to have a way to render HTML tag for web.
   // eslint-disable-next-line react/forbid-elements
 
-  return Object(external_wp_element_["createElement"])("svg", appliedProps);
+  return (0,external_wp_element_namespaceObject.createElement)("svg", { ...appliedProps
+  });
 };
 
 // CONCATENATED MODULE: ./node_modules/@wordpress/primitives/build-module/horizontal-rule/index.js

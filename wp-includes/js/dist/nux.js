@@ -142,10 +142,7 @@ var external_wp_data_ = __webpack_require__("1ZqX");
  * @return {Array} Updated state.
  */
 
-function guides() {
-  let state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-  let action = arguments.length > 1 ? arguments[1] : undefined;
-
+function guides(state = [], action) {
   switch (action.type) {
     case 'TRIGGER_GUIDE':
       return [...state, action.tipIds];
@@ -162,10 +159,7 @@ function guides() {
  * @return {boolean} Updated state.
  */
 
-function areTipsEnabled() {
-  let state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
-  let action = arguments.length > 1 ? arguments[1] : undefined;
-
+function areTipsEnabled(state = true, action) {
   switch (action.type) {
     case 'DISABLE_TIPS':
       return false;
@@ -186,10 +180,7 @@ function areTipsEnabled() {
  * @return {Object} Updated state.
  */
 
-function dismissedTips() {
-  let state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  let action = arguments.length > 1 ? arguments[1] : undefined;
-
+function dismissedTips(state = {}, action) {
   switch (action.type) {
     case 'DISMISS_TIP':
       return { ...state,
@@ -842,12 +833,14 @@ function isShallowEqual( a, b, fromIndex ) {
 });
 
 
-/***/ }),
+function isTipVisible(state, tipId) {
+  if (!state.preferences.areTipsEnabled) {
+    return false;
+  }
 
-/***/ "tI+e":
-/***/ (function(module, exports) {
-
-(function() { module.exports = window["wp"]["components"]; }());
+  if (state.preferences.dismissedTips?.hasOwnProperty(tipId)) {
+    return false;
+  }
 
 /***/ }),
 
@@ -871,9 +864,111 @@ const close = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElem
 }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__["Path"], {
   d: "M13 11.8l6.1-6.3-1-1-6.1 6.2-6.1-6.2-1 1 6.1 6.3-6.5 6.7 1 1 6.5-6.6 6.5 6.6 1-1z"
 }));
-/* harmony default export */ __webpack_exports__["a"] = (close);
+/* harmony default export */ var library_close = (close_close);
+
+;// CONCATENATED MODULE: ./node_modules/@wordpress/nux/build-module/components/dot-tip/index.js
 
 
-/***/ })
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+function onClick(event) {
+  // Tips are often nested within buttons. We stop propagation so that clicking
+  // on a tip doesn't result in the button being clicked.
+  event.stopPropagation();
+}
+
+function DotTip({
+  position = 'middle right',
+  children,
+  isVisible,
+  hasNextTip,
+  onDismiss,
+  onDisable
+}) {
+  const anchorParent = (0,external_wp_element_namespaceObject.useRef)(null);
+  const onFocusOutsideCallback = (0,external_wp_element_namespaceObject.useCallback)(event => {
+    if (!anchorParent.current) {
+      return;
+    }
+
+
+  if (!isVisible) {
+    return null;
+  }
+
+  return (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.Popover, {
+    className: "nux-dot-tip",
+    position: position,
+    focusOnMount: true,
+    role: "dialog",
+    "aria-label": (0,external_wp_i18n_namespaceObject.__)('Editor tips'),
+    onClick: onClick,
+    onFocusOutside: onFocusOutsideCallback
+  }, (0,external_wp_element_namespaceObject.createElement)("p", null, children), (0,external_wp_element_namespaceObject.createElement)("p", null, (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
+    variant: "link",
+    onClick: onDismiss
+  }, hasNextTip ? (0,external_wp_i18n_namespaceObject.__)('See next tip') : (0,external_wp_i18n_namespaceObject.__)('Got it'))), (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
+    className: "nux-dot-tip__disable",
+    icon: library_close,
+    label: (0,external_wp_i18n_namespaceObject.__)('Disable tips'),
+    onClick: onDisable
+  }));
+}
+/* harmony default export */ var dot_tip = ((0,external_wp_compose_namespaceObject.compose)((0,external_wp_data_namespaceObject.withSelect)((select, {
+  tipId
+}) => {
+  const {
+    isTipVisible,
+    getAssociatedGuide
+  } = select(store);
+  const associatedGuide = getAssociatedGuide(tipId);
+  return {
+    isVisible: isTipVisible(tipId),
+    hasNextTip: !!(associatedGuide && associatedGuide.nextTipId)
+  };
+}), (0,external_wp_data_namespaceObject.withDispatch)((dispatch, {
+  tipId
+}) => {
+  const {
+    dismissTip,
+    disableTips
+  } = dispatch(store);
+  return {
+    onDismiss() {
+      dismissTip(tipId);
+    },
+
+    onDisable() {
+      disableTips();
+    }
+
+  };
+}))(DotTip));
+
+;// CONCATENATED MODULE: ./node_modules/@wordpress/nux/build-module/index.js
+/**
+ * WordPress dependencies
+ */
+
+
+
+external_wp_deprecated_default()('wp.nux', {
+  since: '5.4',
+  hint: 'wp.components.Guide can be used to show a user guide.',
+  version: '6.2'
+});
 
 /******/ });

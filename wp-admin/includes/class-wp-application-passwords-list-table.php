@@ -22,7 +22,7 @@ class WP_Application_Passwords_List_Table extends WP_List_Table {
 	 *
 	 * @since 5.6.0
 	 *
-	 * @return array
+	 * @return string[] Array of column titles keyed by their column name.
 	 */
 	public function get_columns() {
 		return array(
@@ -254,7 +254,10 @@ class WP_Application_Passwords_List_Table extends WP_List_Table {
 			}
 
 			if ( $is_primary ) {
-				echo '<button type="button" class="toggle-row"><span class="screen-reader-text">' . __( 'Show more details' ) . '</span></button>';
+				echo '<button type="button" class="toggle-row"><span class="screen-reader-text">' .
+					/* translators: Hidden accessibility text. */
+					__( 'Show more details' ) .
+				'</span></button>';
 			}
 
 			echo '</td>';
